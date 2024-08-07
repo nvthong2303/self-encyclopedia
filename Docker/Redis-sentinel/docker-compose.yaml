@@ -1,0 +1,114 @@
+version: '3'
+
+services:
+  redis-master:
+    image: bitnami/redis:latest
+    ports:
+      - '6379:6379'
+    environment:
+      - REDIS_REPLICATION_MODE=master
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_AOF_ENABLED=yes
+    volumes:
+      - redis-master-db:/bitnami/redis/data
+    networks:
+      redis-net:
+        ipv4_address: 172.50.0.10
+
+  redis-slave1:
+    image: bitnami/redis:latest
+    ports:
+      - '6380:6379'
+    environment:
+      - REDIS_REPLICATION_MODE=slave
+      - REDIS_MASTER_HOST=redis-master
+      - REDIS_MASTER_PORT_NUMBER=6379
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_AOF_ENABLED=yes
+    volumes:
+      - redis-slave1-db:/bitnami/redis/data
+    networks:
+      redis-net:
+        ipv4_address: 172.50.0.11
+    depends_on:
+      - redis-master
+
+  redis-slave2:
+    image: bitnami/redis:latest
+    ports:
+      - '6381:6379'
+    environment:
+      - REDIS_REPLICATION_MODE=slave
+      - REDIS_MASTER_HOST=redis-master
+      - REDIS_MASTER_PORT_NUMBER=6379
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_AOF_ENABLED=yes
+    volumes:
+      - redis-slave2-db:/bitnami/redis/data
+    networks:
+      redis-net:
+        ipv4_address: 172.50.0.12
+    depends_on:
+      - redis-master
+
+  redis-sentinel1:
+    image: bitnami/redis-sentinel:latest
+    ports:
+      - '26379:26379'
+    environment:
+      - REDIS_MASTER_HOST=redis-master
+      - REDIS_MASTER_PORT_NUMBER=6379
+      - REDIS_SENTINEL_PORT_NUMBER=26379
+    networks:
+      redis-net:
+        ipv4_address: 172.50.0.13
+    depends_on:
+      - redis-master
+      - redis-slave1
+      - redis-slave2
+
+  redis-sentinel2:
+    image: bitnami/redis-sentinel:latest
+    ports:
+      - '26380:26379'
+    environment:
+      - REDIS_MASTER_HOST=redis-master
+      - REDIS_MASTER_PORT_NUMBER=6379
+      - REDIS_SENTINEL_PORT_NUMBER=26380
+    networks:
+      redis-net:
+        ipv4_address: 172.50.0.14
+    depends_on:
+      - redis-master
+      - redis-slave1
+      - redis-slave2
+
+  redis-sentinel3:
+    image: bitnami/redis-sentinel:latest
+    ports:
+      - '26381:26379'
+    environment:
+      - REDIS_MASTER_HOST=redis-master
+      - REDIS_MASTER_PORT_NUMBER=6379
+      - REDIS_SENTINEL_PORT_NUMBER=26381
+    networks:
+      redis-net:
+        ipv4_address: 172.50.0.15
+    depends_on:
+      - redis-master
+      - redis-slave1
+      - redis-slave2
+
+networks:
+  redis-net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.50.0.0/24
+
+volumes:
+  redis-master-db:
+  redis-slave1-db:
+  redis-slave2-db:
+

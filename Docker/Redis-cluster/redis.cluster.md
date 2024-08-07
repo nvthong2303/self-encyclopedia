@@ -1,0 +1,118 @@
+### node1:
+```
+docker run -d --name database \
+ -p 16379:16379 \
+ -p 6379:6379 \
+ -v /var/lib/redis/data:/bitnami/redis/data \
+ -v /etc/redis:/opt/bitnami/redis/etc \
+ -e REDIS_PASSWORD=UnVNUbw7nexxsgtJPXFfN5JQqNbTTGxc \
+ -e REDIS_PORT_NUMBER=6379 \
+ -e REDIS_CLUSTER_ANNOUNCE_PORT=6379 \
+ -e REDIS_CLUSTER_ANNOUNCE_IP=192.168.100.151 \
+ -e REDIS_CLUSTER_ANNOUNCE_BUS_PORT=16379 \
+ -e REDIS_NODES=192.168.100.151:6379,192.168.100.156:6379,192.168.100.228:6379,192.168.100.250:6379,192.168.100.234:6379,192.168.100.209:6379 \
+ bitnami/redis-cluster:7.2
+ ```
+
+### node2
+```
+docker run -d --name database \
+ -p 16379:16379 \
+ -p 6379:6379 \
+ -v /var/lib/redis/data:/bitnami/redis/data \
+ -v /etc/redis:/opt/bitnami/redis/etc \
+ -e REDIS_PASSWORD=UnVNUbw7nexxsgtJPXFfN5JQqNbTTGxc \
+ -e REDIS_PORT_NUMBER=6379 \
+ -e REDIS_CLUSTER_ANNOUNCE_PORT=6379 \
+ -e REDIS_CLUSTER_ANNOUNCE_IP=192.168.100.156 \
+ -e REDIS_CLUSTER_ANNOUNCE_BUS_PORT=16379 \
+ -e REDIS_CLUSTER_DYNAMIC_IPS=no \
+ -e REDIS_NODES=192.168.100.151:6379,192.168.100.156:6379,192.168.100.228:6379,192.168.100.250:6379,192.168.100.234:6379,192.168.100.209:6379 \
+bitnami/redis-cluster:7.2
+```
+
+### node3
+```
+ docker run -d --name database \
+ -p 16379:16379 \
+ -p 6379:6379 \
+ -v /var/lib/redis/data:/bitnami/redis/data \
+ -v /etc/redis:/opt/bitnami/redis/etc \
+ -e REDIS_PASSWORD=UnVNUbw7nexxsgtJPXFfN5JQqNbTTGxc \
+ -e REDIS_PORT_NUMBER=6379 \
+ -e REDIS_CLUSTER_ANNOUNCE_PORT=6379 \
+ -e REDIS_CLUSTER_ANNOUNCE_IP=192.168.100.228 \
+ -e REDIS_CLUSTER_ANNOUNCE_BUS_PORT=16379 \
+ -e REDIS_CLUSTER_DYNAMIC_IPS=no \
+ -e REDIS_NODES=192.168.100.151:6379,192.168.100.156:6379,192.168.100.228:6379,192.168.100.250:6379,192.168.100.234:6379,192.168.100.209:6379 \
+ bitnami/redis-cluster:7.2
+```
+
+#### node4
+```
+ docker run -d --name database \
+ -p 16379:16379 \
+ -p 6379:6379 \
+ -v /var/lib/redis/data:/bitnami/redis/data \
+ -v /etc/redis:/opt/bitnami/redis/etc \
+ -e REDIS_PASSWORD=UnVNUbw7nexxsgtJPXFfN5JQqNbTTGxc \
+ -e REDIS_PORT_NUMBER=6379 \
+ -e REDIS_CLUSTER_ANNOUNCE_PORT=6379 \
+ -e REDIS_CLUSTER_ANNOUNCE_IP=192.168.100.250 \
+ -e REDIS_CLUSTER_ANNOUNCE_BUS_PORT=16379 \
+ -e REDIS_CLUSTER_DYNAMIC_IPS=no \
+ -e REDIS_NODES=192.168.100.151:6379,192.168.100.156:6379,192.168.100.228:6379,192.168.100.250:6379,192.168.100.234:6379,192.168.100.209:6379 \
+ bitnami/redis-cluster:7.2
+```
+
+### node5
+```
+ docker run -d --name database \
+ -p 16379:16379 \
+ -p 6379:6379 \
+ -v /var/lib/redis/data:/bitnami/redis/data \
+ -v /etc/redis:/opt/bitnami/redis/etc \
+ -e REDIS_PASSWORD=UnVNUbw7nexxsgtJPXFfN5JQqNbTTGxc \
+ -e REDIS_PORT_NUMBER=6379 \
+ -e REDIS_CLUSTER_ANNOUNCE_PORT=6379 \
+ -e REDIS_CLUSTER_ANNOUNCE_IP=192.168.100.234 \
+ -e REDIS_CLUSTER_ANNOUNCE_BUS_PORT=16379 \
+ -e REDIS_CLUSTER_DYNAMIC_IPS=no \
+ -e REDIS_NODES=192.168.100.151:6379,192.168.100.156:6379,192.168.100.228:6379,192.168.100.250:6379,192.168.100.234:6379,192.168.100.209:6379 \
+ bitnami/redis-cluster:7.2
+```
+
+### node6
+```
+ docker run -d --name database \
+ -p 16379:16379 \
+ -p 6379:6379 \
+ -e REDIS_PASSWORD=UnVNUbw7nexxsgtJPXFfN5JQqNbTTGxc \
+ -e REDIS_PORT_NUMBER=6379 \
+ -e REDIS_CLUSTER_ANNOUNCE_PORT=6379 \
+ -e REDIS_CLUSTER_ANNOUNCE_IP=192.168.100.209 \
+ -e REDIS_CLUSTER_ANNOUNCE_BUS_PORT=16379 \
+ -e REDIS_CLUSTER_DYNAMIC_IPS=no \
+ -e REDIS_NODES=192.168.100.151:6379,192.168.100.156:6379,192.168.100.228:6379,192.168.100.250:6379,192.168.100.234:6379,192.168.100.209:6379 \
+ bitnami/redis-cluster:7.2
+ ```
+
+
+redis-cli -p 6379 -a UnVNUbw7nexxsgtJPXFfN5JQqNbTTGxc --cluster create 192.168.100.151:6379 192.168.100.156:6379 192.168.100.228:6379 192.168.100.250:6379 192.168.100.234:6379 192.168.100.209:6379 --cluster-yes --cluster-replicas 1
+
+redis-cli -a UnVNUbw7nexxsgtJPXFfN5JQqNbTTGxc -c CLUSTER NODES
+
+redis-cli -h 192.168.100.151 -p 6379 -a UnVNUbw7nexxsgtJPXFfN5JQqNbTTGxc -c
+redis-cli -h 192.168.100.156 -p 6379 -a UnVNUbw7nexxsgtJPXFfN5JQqNbTTGxc -c
+redis-cli -h 192.168.100.228 -p 6379 -a UnVNUbw7nexxsgtJPXFfN5JQqNbTTGxc -c
+redis-cli -h 192.168.100.250 -p 6379 -a UnVNUbw7nexxsgtJPXFfN5JQqNbTTGxc -c
+redis-cli -h 192.168.100.234 -p 6379 -a UnVNUbw7nexxsgtJPXFfN5JQqNbTTGxc -c
+
+
+
+192.168.100.151:6379 
+192.168.100.156:6379 
+192.168.100.228:6379 
+192.168.100.250:6379 
+192.168.100.234:6379 
+192.168.100.209:6379

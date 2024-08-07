@@ -1,0 +1,62 @@
+[
+  {
+    "name": "b46566f543f71732f40a6fc9754573236148c974",
+    "host": "127.0.0.1",
+    "port": 6379,
+    "replicate": null,
+    "slots": [[0,5460]],
+    "slots_count": 5461,
+    "flags": "master",
+    "current_epoch": 1
+  },
+  {
+    "name": "a1166abf61d0376b5d4fd549030e13f529da1746",
+    "host": "172.22.0.5",
+    "port": 6379,
+    "replicate": "b46566f543f71732f40a6fc9754573236148c974",
+    "slots": [],
+    "slots_count": 0,
+    "flags": "slave",
+    "current_epoch": 1
+  },
+  {
+    "name": "71ec1c57cabe0d0c78a09531b3ce715643e272ee",
+    "host": "172.22.0.7",
+    "port": 6379,
+    "replicate": "c3d0578d2dac896fbe9fb96e360846ab1dab89ee",
+    "slots": [],
+    "slots_count": 0,
+    "flags": "slave",
+    "current_epoch": 2
+  },
+  {
+    "name": "9cf2db4fe4eef7e9e150343339c9f10cba8704e6",
+    "host": "172.22.0.4",
+    "port": 6379,
+    "replicate": "e22dc5fc50b5b5280f5876923963a9f18e319775",
+    "slots": [],
+    "slots_count": 0,
+    "flags": "slave",
+    "current_epoch": 3
+  },
+  {
+    "name": "e22dc5fc50b5b5280f5876923963a9f18e319775",
+    "host": "172.22.0.6",
+    "port": 6379,
+    "replicate": null,
+    "slots": [[10923,16383]],
+    "slots_count": 5461,
+    "flags": "master",
+    "current_epoch": 3
+  },
+  {
+    "name": "c3d0578d2dac896fbe9fb96e360846ab1dab89ee",
+    "host": "172.22.0.2",
+    "port": 6379,
+    "replicate": null,
+    "slots": [[5461,10922]],
+    "slots_count": 5462,
+    "flags": "master",
+    "current_epoch": 2
+  }
+]

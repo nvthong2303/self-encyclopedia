@@ -1,0 +1,61 @@
+version: '2'
+
+services:
+  kafka:
+    container_name: kafka-plain
+    image: 'bitnami/kafka:latest'
+    environment:
+      - KAFKA_ENABLE_KRAFT=yes
+      - KAFKA_CFG_NODE_ID=1
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@127.0.0.1:9093
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,SASL_PLAINTEXT://:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092,SASL_PLAINTEXT://127.0.0.1:9094
+      - KAFKA_CFG_LOG_DIRS=/opt/bitnami/kafka/logs
+      - KAFKA_CFG_SASL_ENABLED_MECHANISMS=PLAIN
+      - KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL=PLAIN
+      - KAFKA_CFG_SECURITY_INTER_BROKER_PROTOCOL=SASL_PLAINTEXT
+      - KAFKA_CFG_SUPER_USERS=User:admin
+      - KAFKA_OPTS=-Djava.security.auth.login.config=/opt/bitnami/kafka/config/kafka_jaas.conf
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,SASL_PLAINTEXT:SASL_PLAINTEXT 
+      - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR=1
+      - KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+    volumes:
+      - ./kafka_jaas.conf:/opt/bitnami/kafka/config/kafka_jaas.conf
+    ports:
+      - '9092:9092'
+      - '9093:9093'
+      - '9094:9094'
+
+# KAFKA_CFG_CONTROLLER_LISTENER_NAMES : Xác định tên listener được sử dụng cho các kết nối đến controller trong 
+#   chế độ KRaft. Tên này phải khớp với tên listener trong KAFKA_CFG_LISTENERS.
+# KAFKA_CFG_CONTROLLER_QUORUM_VOTERS : Xác định các thành viên trong quorums của controller. 
+#   Trong chế độ KRaft, các controller cần phải đạt được sự đồng thuận để thực hiện các thay đổi metadata. 
+#   1@127.0.0.1:9093 có nghĩa là node với ID 1 và địa chỉ IP 127.0.0.1 trên cổng 9093 sẽ là một phần của quorums.
+# KAFKA_CFG_LISTENERS : Xác định các listener mà Kafka sẽ sử dụng để nhận kết nối. 
+#   PLAINTEXT dùng cho kết nối không mã hóa, CONTROLLER dùng cho các kết nối đến controller, 
+#   và SASL_PLAINTEXT dùng cho kết nối mã hóa SASL nhưng không mã hóa dữ liệu.
+# KAFKA_CFG_ADVERTISED_LISTENERS : Xác định các địa chỉ mà Kafka sẽ quảng cáo cho các client để kết nối. 
+#   PLAINTEXT và SASL_PLAINTEXT là các địa chỉ mà client sẽ sử dụng để kết nối đến Kafka broker.
+# KAFKA_CFG_LOG_DIRS=/opt/bitnami/kafka/logs : Xác định thư mục nơi Kafka lưu trữ các log (dữ liệu topic). 
+#   Đây là nơi Kafka sẽ lưu trữ dữ liệu của các topic và các thông tin log khác.
+# KAFKA_CFG_SASL_ENABLED_MECHANISMS : Xác định cơ chế SASL được bật. Trong trường hợp này, 
+#   chỉ có cơ chế PLAIN được sử dụng. PLAIN gửi tên người dùng và mật khẩu dưới dạng văn bản không mã hóa.
+# KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL : Xác định cơ chế SASL được sử dụng cho giao tiếp giữa các broker. 
+#   PLAIN có nghĩa là giao tiếp giữa các broker không được mã hóa.
+# KAFKA_CFG_SECURITY_INTER_BROKER_PROTOCOL : Xác định giao thức bảo mật được sử dụng cho giao tiếp giữa các broker. 
+#   SASL_PLAINTEXT cho biết rằng giao tiếp giữa các broker sẽ sử dụng SASL cho xác thực, nhưng dữ liệu không được mã hóa.
+# KAFKA_CFG_SUPER_USERS=User:admin : Xác định các người dùng có quyền admin (quản trị viên). 
+#   User:admin có nghĩa là người dùng admin có quyền quản trị đầy đủ trong Kafka.
+# KAFKA_OPTS : Xác định tùy chọn JVM để cung cấp file cấu hình JAAS cho Kafka, nơi chứa cấu hình 
+#   cho SASL và các cài đặt bảo mật khác.
+# KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP : Xác định bản đồ giữa các listener names và các giao thức bảo mật. 
+#   PLAINTEXT listener sử dụng giao thức PLAINTEXT, và SASL_PLAINTEXT listener sử dụng giao thức SASL_PLAINTEXT.
+# KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR : Xác định số lượng bản sao của topic lưu trữ các offset (điểm dừng) 
+#   của các consumer group. 1 có nghĩa là chỉ có một bản sao.
+# KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR : Xác định số lượng các replica cần phải có trong trạng thái tốt nhất 
+#   để đảm bảo rằng transaction log có thể được ghi. 1 có nghĩa là ít nhất một replica cần phải có trạng thái tốt.
+# KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR : Xác định số lượng bản sao của topic lưu trữ các 
+#   trạng thái transaction. 1 có nghĩa là chỉ có một bản sao của transaction log.

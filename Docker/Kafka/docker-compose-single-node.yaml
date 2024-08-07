@@ -1,0 +1,42 @@
+version: "2"
+
+services:
+  kafka:
+    image: docker.io/bitnami/kafka:3.7
+    ports:
+      - "9092:9092"
+    volumes:
+      - "kafka_data:/bitnami"
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+volumes:
+  kafka_data:
+    driver: local
+
+
+
+# # KRaft settings
+# - KAFKA_CFG_NODE_ID=0
+# # Id node kafka
+# - KAFKA_CFG_PROCESS_ROLES=controller,broker
+# # vai trò của process kafka trên node này là controller (bộ điều khiển) và broker (broker chính)
+# - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+# # địa chỉ của controller quorum voter, ở đây là node kafka với id 0
+# # Listeners: chia ra 2 loại listener, một là listener cho client (PLAINTEXT), một là listener cho controller (CONTROLLER)
+# - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+# # địa chỉ của các listener, ở đây có 2 listener, một là PLAINTEXT ở cổng 9092, một là CONTROLLER ở cổng 9093
+# - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
+# # địa chỉ của listener mà client sẽ kết nối, ở đây là listener PLAINTEXT
+# - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+# # bảo mật cho listener, ở đây listener CONTROLLER sẽ sử dụng bảo mật PLAINTEXT, listener PLAINTEXT cũng sử dụng bảo mật PLAINTEXT
+# - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+# # tên của listener mà controller sẽ sử dụng, ở đây là CONTROLLER
+# - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+# # tên của listener mà các broker sẽ sử dụng để giao tiếp với nhau, ở đây là PLAINTEXT

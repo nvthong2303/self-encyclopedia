@@ -1,0 +1,64 @@
+### node1:
+```
+docker run -d --name database \
+ -p 16379:16379 \
+ -p 6379:6379 \
+ -e ALLOW_EMPTY_PASSWORD=yes \
+ -e REDIS_NODES=192.168.100.151:6379,192.168.100.156:6379,192.168.100.228:6379,192.168.100.250:6379,192.168.100.234:6379,192.168.100.209:6379 \
+ bitnami/redis-cluster:6.2
+ ```
+
+### node2
+```
+docker run -d --name database \
+ -p 16379:16379 \
+ -p 6379:6379 \
+ -e ALLOW_EMPTY_PASSWORD=yes \
+ -e REDIS_NODES=192.168.100.151:6379 192.168.100.156:6379 192.168.100.228:6379 192.168.100.250:6379 192.168.100.234:6379 192.168.100.209:6379 \
+bitnami/redis-cluster:6.2
+```
+
+### node3
+```
+ docker run -d --name database \
+ -p 16379:16379 \
+ -p 6379:6379 \
+ -e ALLOW_EMPTY_PASSWORD=yes \
+ -e REDIS_NODES=192.168.100.151:6379 192.168.100.156:6379 192.168.100.228:6379 192.168.100.250:6379 192.168.100.234:6379 192.168.100.209:6379 \
+ bitnami/redis-cluster:6.2
+```
+
+#### node4
+```
+ docker run -d --name database \
+ -p 16379:16379 \
+ -p 6379:6379 \
+ -e ALLOW_EMPTY_PASSWORD=yes \
+ -e REDIS_NODES=192.168.100.151:6379 192.168.100.156:6379 192.168.100.228:6379 192.168.100.250:6379 192.168.100.234:6379 192.168.100.209:6379 \
+ bitnami/redis-cluster:6.2
+```
+
+### node5
+```
+ docker run -d --name database \
+ -p 16379:16379 \
+ -p 6379:6379 \
+ -e ALLOW_EMPTY_PASSWORD=yes \
+ -e REDIS_NODES=192.168.100.151:6379 192.168.100.156:6379 192.168.100.228:6379 192.168.100.250:6379 192.168.100.234:6379 192.168.100.209:6379 \
+ bitnami/redis-cluster:6.2
+```
+
+### node6
+```
+ docker run -d --name database \
+ -p 16379:16379 \
+ -p 6379:6379 \
+ -e ALLOW_EMPTY_PASSWORD=yes \
+ -e REDIS_CLUSTER_REPLICAS=1 \
+ -e REDIS_CLUSTER_CREATOR=yes \
+ -e REDIS_NODES=192.168.100.151:6379 192.168.100.156:6379 192.168.100.228:6379 192.168.100.250:6379 192.168.100.234:6379 192.168.100.209:6379 \
+ bitnami/redis-cluster:6.2
+ ```
+
+ ### cmd:
+ redis-cli --cluster create 192.168.100.151:6379 192.168.100.156:6379 192.168.100.228:6379 192.168.100.250:6379 192.168.100.234:6379 192.168.100.209:6379 --cluster-replicas 1 --cluster-yes

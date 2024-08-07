@@ -1,0 +1,77 @@
+version: '2'
+
+services:
+  redis_master:
+    image: bitnami/redis:6.2.10
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PORT_NUMBER=6379
+      - REDIS_REPLICATION_MODE=master
+      - REDIS_PASSWORD=123456
+      - REDIS_MASTER_PASSWORD=123456
+  redis_replica1:
+    image: bitnami/redis:6.2.10
+    ports:
+      - "6380:6380"
+    environment:
+      - REDIS_PORT_NUMBER=6380
+      - REDIS_REPLICATION_MODE=slave
+      - REDIS_MASTER_HOST=redis_master
+      - REDIS_MASTER_PORT_NUMBER=6379
+      - REDIS_MASTER_PASSWORD=123456
+      - REDIS_PASSWORD=123456
+    depends_on:
+      - redis_master
+  redis_replica2:
+    image: bitnami/redis:6.2.10
+    ports:
+      - "6381:6381"
+    environment:
+      - REDIS_PORT_NUMBER=6381
+      - REDIS_REPLICATION_MODE=slave
+      - REDIS_MASTER_HOST=redis_master
+      - REDIS_MASTER_PORT_NUMBER=6379
+      - REDIS_MASTER_PASSWORD=123456
+      - REDIS_PASSWORD=123456
+    depends_on:
+      - redis_master
+  redis_sentinel1:
+    image: bitnami/redis-sentinel:6.2.10
+    ports:
+      - "26379:26379"
+    environment:
+      - REDIS_MASTER_HOST=redis_master
+      - REDIS_MASTER_PORT_NUMBER=6379
+      - REDIS_MASTER_PASSWORD=123456
+      - REDIS_SENTINEL_PORT_NUMBER=26379
+    depends_on:
+      - redis_master
+      - redis_replica1
+      - redis_replica2
+  redis_sentinel2:
+    image: bitnami/redis-sentinel:6.2.10
+    ports:
+      - "26380:26380"
+    environment:
+      - REDIS_MASTER_HOST=redis_master
+      - REDIS_MASTER_PORT_NUMBER=6379
+      - REDIS_MASTER_PASSWORD=123456
+      - REDIS_SENTINEL_PORT_NUMBER=26380
+    depends_on:
+      - redis_master
+      - redis_replica1
+      - redis_replica2
+  redis_sentinel3:
+    image: bitnami/redis-sentinel:6.2.10
+    ports:
+      - "26381:26381"
+    environment:
+      - REDIS_MASTER_HOST=redis_master
+      - REDIS_MASTER_PORT_NUMBER=6379
+      - REDIS_MASTER_PASSWORD=123456
+      - REDIS_SENTINEL_PORT_NUMBER=26381
+    depends_on:
+      - redis_master
+      - redis_replica1
+      - redis_replica2

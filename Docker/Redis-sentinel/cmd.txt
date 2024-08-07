@@ -1,0 +1,151 @@
+################## vm1
+docker run -d --name master \
+    --network redis-net \
+    -p 6379:6379 \
+    -e REDIS_REPLICATION_MODE=master \
+    -e ALLOW_EMPTY_PASSWORD=yes \
+    -e REDIS_AOF_ENABLED=yes \
+    -e REDIS_REPLICA_IP=10.60.65.90 \
+    -e REDIS_REPLICA_PORT=6379 \
+    bitnami/redis:6.0
+
+docker run -d --name sentinel \
+    --network redis-net \
+    -p 26379:26379 \
+    -e REDIS_MASTER_HOST=10.60.65.90 \
+    -e REDIS_MASTER_PORT_NUMBER=6379 \
+    -e ALLOW_EMPTY_PASSWORD=yes \
+    -e REDIS_SENTINEL_ANNOUNCE_IP=10.60.65.90 \
+    bitnami/redis-sentinel:6.0
+
+################# vm2
+docker run -d --name slave \
+    --network redis-net \
+    -p 6379:6379 \
+    -e REDIS_REPLICATION_MODE=slave \
+    -e ALLOW_EMPTY_PASSWORD=yes \
+    -e REDIS_MASTER_HOST=10.60.65.90 \
+    -e REDIS_MASTER_PORT_NUMBER=6379 \
+    -e REDIS_AOF_ENABLED=yes \
+    -e REDIS_REPLICA_IP=10.60.65.91 \
+    -e REDIS_REPLICA_PORT=6379 \
+    bitnami/redis:6.0 
+
+docker run -d --name sentinel \
+    --network redis-net \
+    -p 26379:26379 \
+    -e REDIS_MASTER_HOST=10.60.65.90 \
+    -e REDIS_MASTER_PORT_NUMBER=6379 \
+    -e ALLOW_EMPTY_PASSWORD=yes \
+    -e REDIS_SENTINEL_ANNOUNCE_IP=10.60.65.91 \
+    bitnami/redis-sentinel:6.0
+
+################# vm3
+docker run -d --name slave \
+    --network redis-net \
+    -p 6379:6379 \
+    -e REDIS_REPLICATION_MODE=slave \
+    -e ALLOW_EMPTY_PASSWORD=yes \
+    -e REDIS_MASTER_HOST=10.60.65.90 \
+    -e REDIS_MASTER_PORT_NUMBER=6379 \
+    -e REDIS_AOF_ENABLED=yes \
+    -e REDIS_REPLICA_IP=10.60.65.92 \
+    -e REDIS_REPLICA_PORT=6379 \
+    bitnami/redis:6.0 
+
+docker run -d --name sentinel \
+    --network redis-net \
+    -p 26379:26379 \
+    -e REDIS_MASTER_HOST=10.60.65.90 \
+    -e REDIS_MASTER_PORT_NUMBER=6379 \
+    -e ALLOW_EMPTY_PASSWORD=yes \
+    -e REDIS_SENTINEL_ANNOUNCE_IP=10.60.65.92 \
+    bitnami/redis-sentinel:6.0
+
+
+
+docker logs -f sentinel
+docker rm -f master sentinel
+docker rm -f slave sentinel
+docker network rm redis-net
+
+docker rm -f database sentinel; systemctl restart guest-agent; journalctl -f -u guest-agent
+systemctl restart guest-agent; docker 
+systemctl stop guest-agent; docker rm -f database sentinel
+
+10.60.66.63 - 172.29.64.61
+10.60.66.163 - 172.29.64.56
+10.60.66.95 - 172.29.68.107
+
+
+docker run -d --name master \
+    --network redis-net \
+    -p 6379:6379 \
+    -e REDIS_REPLICATION_MODE=master \
+    -e REDIS_AOF_ENABLED=yes \
+    -e REDIS_REPLICA_IP=10.60.65.90 \
+    -e REDIS_REPLICA_PORT=6379 \
+    -e REDIS_PASSWORD=password123 \
+    bitnami/redis:6.0
+
+docker run -d --name slave \
+    --network redis-net \
+    -p 6379:6379 \
+    -e REDIS_REPLICATION_MODE=slave \
+    -e REDIS_MASTER_HOST=10.60.65.90 \
+    -e REDIS_MASTER_PORT_NUMBER=6379 \
+    -e REDIS_AOF_ENABLED=yes \
+    -e REDIS_REPLICA_IP=10.60.65.91 \
+    -e REDIS_REPLICA_PORT=6379 \
+    -e REDIS_PASSWORD=password123 \
+    -e REDIS_MASTER_PASSWORD=password123 \
+    bitnami/redis:6.0
+
+docker run -d --name slave \
+    --network redis-net \
+    -p 6379:6379 \
+    -e REDIS_REPLICATION_MODE=slave \
+    -e REDIS_MASTER_HOST=10.60.65.90 \
+    -e REDIS_MASTER_PORT_NUMBER=6379 \
+    -e REDIS_AOF_ENABLED=yes \
+    -e REDIS_REPLICA_IP=10.60.65.92 \
+    -e REDIS_REPLICA_PORT=6379 \
+    -e REDIS_PASSWORD=password123 \
+    -e REDIS_MASTER_PASSWORD=password123 \
+    bitnami/redis:6.0 
+
+
+
+
+docker run -d --name sentinel \
+    -p 26379:26379 \
+    -e REDIS_MASTER_HOST=10.60.66.77 \
+    -e REDIS_MASTER_PORT_NUMBER=6379 \
+    -e ALLOW_EMPTY_PASSWORD=yes \
+    -e REDIS_SENTINEL_ANNOUNCE_IP=10.60.66.77 \
+    bitnami/redis-sentinel:6.0
+docker run -d --name sentinel \
+    -p 26379:26379 \
+    -e REDIS_MASTER_HOST=10.60.66.77 \
+    -e REDIS_MASTER_PORT_NUMBER=6379 \
+    -e ALLOW_EMPTY_PASSWORD=yes \
+    -e REDIS_SENTINEL_ANNOUNCE_IP=10.60.66.203 \
+    bitnami/redis-sentinel:6.0
+docker run -d --name sentinel \
+    -p 26379:26379 \
+    -e REDIS_MASTER_HOST=10.60.66.77 \
+    -e REDIS_MASTER_PORT_NUMBER=6379 \
+    -e ALLOW_EMPTY_PASSWORD=yes \
+    -e REDIS_SENTINEL_ANNOUNCE_IP=10.60.66.209 \
+    bitnami/redis-sentinel:6.0
+
+
+
+
+
+
+
+
+
+
+
