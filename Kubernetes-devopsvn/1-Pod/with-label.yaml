@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-kube-with-labels
+  labels:
+    enviroment: testing
+    project: kubernetes-series
+spec:
+  containers:
+  - name: hello-kube
+    image: 080196/hello-kube
+    ports:
+    - containerPort: 3000
+      protocol: TCP
+
+
+
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-kube-staging
+  labels:
+    enviroment: staging
+    project: kubernetes-series
+spec:
+  containers:
+  - name: hello-kube
+    image: 080196/hello-kube
+    ports:
+    - containerPort: 3000
+      protocol: TCP
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-kube-production
+  labels:
+    enviroment: production
+    project: kubernetes-series
+spec:
+  containers:
+  - name: hello-kube
+    image: 080196/hello-kube
+    ports:
+    - containerPort: 3000
+      protocol: TCP

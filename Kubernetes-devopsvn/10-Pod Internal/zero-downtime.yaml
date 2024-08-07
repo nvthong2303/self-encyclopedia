@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: socket-server
+spect:
+  replicas: 3
+  selector:
+    matchLabels:
+      component: socket-server
+  template: 
+    metadata:
+      labels:
+        component: socket-server
+    spec:
+      containers:
+        - name: socket-server
+          image: registry.kala.ai/web-crm/socket-server
+          ports:
+            - containerPort: 3001
+          envFrom:
+            - configMapRef:
+                name: backend
+          readinessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            tcpSocket:
+              port: 3001

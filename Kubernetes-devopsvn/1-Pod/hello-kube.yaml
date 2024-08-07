@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-kube
+  namespace: testing
+spec:
+  containers:
+  - name: hello-kube
+    image: 080196/hello-kube
+    ports:
+    - containerPort: 3000
+      protocol: TCP

@@ -1,0 +1,34 @@
+states:
+  - build
+  - deploy
+
+image:
+  name: docker: stable
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
+
+services:
+  - docker: stable-dind
+
+build root image:
+  stage: build
+  before_script:
+    - echo "$REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $REGISTRY_USER --password-stdin
+  script:
+    - docker pull $CI_REGISTRY_IMAGE:latest || true
+    - docker build --cache-from $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA --tag $CI_REGISTRY_IMAGE:latest
+    - docker push $CI_REGISTRY_IMAGE:latest
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+  only:
+    - main
+
+deploy k8s:
+  stage: deploy
+  image: bitnami/kubectl
+  script:
+    - kubectl -n testing set image deployment microservice microservice=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+  when: manual
+  only:
+    - main

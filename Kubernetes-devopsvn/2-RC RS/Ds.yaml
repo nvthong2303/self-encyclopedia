@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: hello-ds
+spec:
+  selector:
+    matchLabels:
+      app: hello-kube
+  template:
+    metadata:
+      labels:
+        app: hello-kube
+    spec:
+      containers:
+      - name: hello-kube
+        image: 080196/hello-kube
+        ports:
+        - containerPort: 3000
+          protocol: TCP

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: downward
+spec:
+  containers:
+    - name: main
+      image: busybox
+      command: ["sleep", "9999999"]
+      resources:
+        requests:
+          cpu: 15m
+          memory: 100Ki
+        limits:
+          cpu: 100m
+          memory: 8Mi
+      env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+
+
