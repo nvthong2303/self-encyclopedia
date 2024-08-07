@@ -1,6 +1,6 @@
 # giới thiệu về Kubernetes:
 
-- Nền tảng quản lý container. Có thể dùng kubernetes để phát triển ứng dụng trên nhiều nền tảng khác nhau, on-premises, cloud hoặc virtual machine.
+- Nền tảng quản lý container. dụng trên nhiều nền tảng khác nhau, on-premises, cloud hoặc virtuaCó thể dùng kubernetes để phát triển ứng l machine.
 - Được phát triển bởi Google.
 
 ### Kubernetes giải quyết vấn đề gì ? 
@@ -13,14 +13,14 @@
 ### Mục lục
 1. kiến trúc và các thành phần
 2. các khái niệm trong kubernetes
-3. core concept
-4. scheduling
-5. logging and monitoring
-6. application lifecycle management
-7. cluster maintainer management
-8. security
-9. storate
-10. netwiorking
-11. troubleshooting
-
+3. command line thường dùng
+4. core concept
+5. scheduling
+6. logging and monitoring
+7. application lifecycle management
+8. cluster maintainer management
+9. security
+10. storate 
+11. netwiorking
+12. troubleshooting
 
