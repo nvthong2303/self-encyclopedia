@@ -60,8 +60,23 @@
 
 
 
+## Pod lifecycle:
+- xem xét:
+    - Pod Phases:
+
+        | Phases | Mô tả |
+        |-------|-------|
+        | Pending | Pod tạo nhưng chưa chạy |
+        | Running | Ít nhất 1 container trong Pod đang chạy hoặc 1 process đang start hoặc đang restart |
+        | Succeeded | Tất cả các container đã chạy thành công |
+        | Failed | Ít nhất 1 container lỗi |
+        | Unknow | API-server không lấy được Pod status |
+
+    - Pod Conditions: Pod status cung cấp trạng thái của pod, còn Pod condition cung cấp thông tin chi tiết về scheduling, readliness, initialization.
+    - Container Status: 
 
 
-
+## Tại sao k8s sử dụng Pod chứ k phải container ?
+- 
 
 

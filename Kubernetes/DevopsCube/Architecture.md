@@ -17,6 +17,7 @@
     - Điều phối các quy trình giữa control plane và các worker node.
     - Chủ yếu được sử dụng để truy cập từ bên ngoài cụm.
     - Hỗ trợ theo dõi sự thay đổi của tài nguyên (sửa, tạo, xóa)
+- Hoạt động trên port 6443 (HTTPS) và 8080 (HTTP) 
 
 ### etcd:
 - k8s là một hệ phân tán và nó cần 1 hệ csdl phân tán hiệu quả như etcd để hỗ trợ tính phân tán của nó. ETCD là một opensource kho lưu trữ key-value phân tán, nhất quán. Có thể koi nó là não bộ của cụm k8s.
@@ -26,16 +27,20 @@
     - lưu trữ data dưới dạng key-value: ~ BoltDB
 - ETCD lưu trữ gì ? config, trạng thái, metadata của các Object (pod, secret, daemonset, ...)
 - Hỗ trợ Watch api để theo dõi sự thay đổi data.
+- Hoạt động trên port 2380 để listening các request và 2379 để client gửi request tới.
+
 
 ### kube-scheduler: 
 - Service mặc đinh của k8s làm nhiệm vụ phân phối pod sẽ được chạy trên node nào.
 - Tìm kiếm các node thỏa mãn điều kiện và lựa chọn node tối ưu nhất để chạy (CPU, disk, RAM, PV, ...).
 - Trong trường hợp không có node nào thỏa mãn, pod sẽ ở trạng thái chưa được lên lịch cho tới khi Scheduler tìm được node phù hợp.
+- Sử dụng port 10251
 
 
 ### kube-controller:
 - Service có nhiệm vụ điều tiết trạng thái của k8s.
 - Là một vòng lặp điều khiển giám sát trạng thái của cluster được chia sẻ qua các api và thực hiện các thay đổi cần thiết để chuyển trạng thái của cluster tới trạng thái mong muốn.
+- Sử dụng port 10252
 
 ### cloud-controller-manager:
 - cloud-controller-manager cung cấp các bộ controller riêng cho cloud để đảm bảo trạng thái mong muốn:
@@ -64,6 +69,7 @@
 - Các khái niệm:
     - Container runtime interface (CRI)
     - Open container initiative (OCI)
+- Phổ biến nhất là docker
     
 
 ## 3. Các thành phần bổ sung:
@@ -72,7 +78,7 @@
 - CNI là một chuẩn giao diện cho phép tích hợp các plugin mạng khác nhau vào các hệ thống container như Kubernetes. CNI định nghĩa một tập hợp các thông số và giao diện API mà các plugin phải tuân theo để cung cấp mạng cho container. Kubernetes sử dụng CNI để kết nối các pod với mạng và thiết lập các quy tắc mạng.
 - Cách CNI Plugin hoạt động
 - Các CNI Plugin phổ biến:
-    - Calico
+    - Calico (Tigera)
     - Flannel
     - Weave net
     - Cilium
