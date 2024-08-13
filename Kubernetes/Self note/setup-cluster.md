@@ -1,6 +1,8 @@
 deploy trên 3 VM: 10.60.65.90, 10.60.65.91, 10.60.65.92
 user root
 
+# Use Kubeadm:
+
 ## 1. Download & unpack containerd package
 ```
 wget https://github.com/containerd/containerd/releases/download/v1.6.14/containerd-1.6.14-linux-amd64.tar.gz
@@ -106,6 +108,7 @@ cni-plugins-linux-amd64-v1.1.1.tgz                   100%[======================
 ./ipvlan
 ./bandwidth
 ```
+
 ## 4. Configure containerd
 - Create a containerd directory for the configuration file
 - config.toml is the default configuration file for containerd
@@ -167,7 +170,7 @@ sudo apt-get install -y kubelet kubeadm kubectl
 ```
 
 
-# Init Cluster
+## Init Cluster
 - Sửa file host (ở cả 3 node):
 ```
 10.60.65.90	thong-test-kafka01
@@ -175,7 +178,7 @@ sudo apt-get install -y kubelet kubeadm kubectl
 10.60.65.92	thong-test-kafka03
 ```
 
-## Node master:
+### Node master:
 - Khởi tạo cụm k8s:
 ```
 sudo kubeadm init --control-plane-endpoint=thong-test-kafka01
@@ -191,9 +194,7 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
-
-
-## Node Worker:
+### Node Worker:
 - Thêm node vào cụm (chạy trên các node worker):
 ```
 sudo kubeadm join thong-test-kafka01:6443 --token 3tgtls.4psf3j5jvxkg67kc --discovery-token-ca-cert-hash sha256:3e954b79db731f4bea85a9c6cfce7b0f41506b893dea5ac9e339058b10171110
@@ -215,3 +216,5 @@ sudo rm /etc/containerd/config.toml
 sudo systemctl restart containerd
 
 ```
+
+# 
