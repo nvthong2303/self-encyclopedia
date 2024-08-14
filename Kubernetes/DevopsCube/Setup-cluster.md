@@ -217,4 +217,8 @@ sudo systemctl restart containerd
 
 ```
 
-# 
+# CNI plugin
+- trên node master, cài calico:
+```
+kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml
+```
