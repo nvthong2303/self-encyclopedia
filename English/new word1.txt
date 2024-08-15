@@ -4,7 +4,9 @@ gain: đạt được
 insight: hiểu biết
 aspect: khía cạnh
 various: khác nhau
-
-
+concept: khái niệm 
+assume: giả sử 
+typically: tiêu biểu
+confused: bối rối
 
 
