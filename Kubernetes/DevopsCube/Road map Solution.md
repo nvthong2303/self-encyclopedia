@@ -240,16 +240,228 @@ spec:
 
 
 ### 8. Add Persistent Volume to the pod.
-- 
+- tạo PV: 
+```
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: my-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+```
+- tạo pvc:
+```
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+```
+- gắn pvc vào pod bằng path host: ```/mmt/data``` vào path ```/usr/share/nginx/html```:
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+  - name: my-container
+    image: nginx
+    volumeMounts:
+    - mountPath: "/usr/share/nginx/html"
+      name: my-storage
+  volumes:
+  - name: my-storage
+    persistentVolumeClaim:
+      claimName: my-pvc
+```
 
 ### 9. Attach configmap to pod.
+- tạo config map: ```kubectl create configmap my-config --from-file=app-config.properties ```
+- gắn vào pod:
+```
+# dạng env:
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+    - name: my-container
+      image: nginx
+      env:
+        - name: CONFIG_SETTING1
+          valueFrom:
+            name: my-config
+            key: setting1
+
+# dạng volume:
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+    - name: my-container
+      image: nginx
+      volumeMounts:
+        - mountPath: /etc/config
+          name: config-volume
+  volumes:
+    - name: config-volume
+      configMap:
+        name: my-config
+```
+
 ### 10. Add Secret to pod.
+- tạo secret:
+```
+apiVersion: v1
+kind: Secret
+medata:
+  name: my-secret
+type: Opaque
+data:
+  username: admin
+  password: 123456
+```
+- gán vào pod:
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+  - name: my-container
+    image: nginx
+    volumeMounts:
+    - name: srt
+      mountPath: "/srt"
+      readOnly: true
+  volumes:
+  - name: srt
+    secret:
+      secretName: my-secret
+```
+
 ### 11. multi-container pods (sidecar container pattern).
+- pattern phổ biến, sử dụng các container phụ trợ (sidecar container) trong cùng Pod với main container, thường cung cấp các service hỗ trợ cho main container như logging, monitoring, proxy, hoặc catching.
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sidecar-container
+spec:
+  containers:
+  - name: sidecar-container
+    image: busybox
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do echo  $(date -u) 'This is just an echo from simple Sidecar Container' >> /var/log/index.html; sleep 5;done"]
+    resources: {}
+    volumeMounts:
+    - name: shared-logs
+      mountPath: /var/log
+    
+  - name: main-container
+    image: nginx
+    resources: {}
+    ports:
+    - containerPort: 80
+    volumeMounts:
+    - name: shared-logs
+      mountPath: /usr/share/nginx/html
+  
+  volumes:
+  - name: shared-log
+    emptyDir: {}
+  
+  dnsPolicy: Default
+```
+
+
 ### 12. Init containers.
+- Init container là container đặc biệt trong k8s, chạy trước các container chính (cùng Pod), dùng để thực hiện các tác vụ chuẩn bị cho container chính.
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  initContainers:
+  - name: init-service
+    image: busybox
+    command: ["sh", "-c", "echo Preparing data ... && sleep 10 && echo Done."]
+  containers:
+  - name: my-app
+    image: nginx
+    ports:
+    - containerPorts: 80
+```
+
 ### 13. Ephemeral containers.
+- Ephameral là một tính năng đặc biệt trong k8s, dùng để debug và khắc phục sự cố trong các Pod, mà không cần can thiệp cấu hình hay khởi động lại Pod.
+- Ephameral Pod là tạm thời, không tồn tại lâu dài và cũng không được khai báo trong các spec ban đầu của Pod, không thể restart.
+
+- Thêm ephameral Pod:
+```
+kubectl debug -it nginx-pod --image=busybox --target=nginx-container
+```
+
 ### 14. Static Pods.
+- Là loại pod đặc biệt, được kubelet quản lý chứ k phải apiserver, thường dùng để triển khai các thành phần cơ sở trên các node: kube-apiserver, kube-schedule, kube-controller-manager, ...
+- Tự động restart khi có sự cố, được khai báo trong bằng các file cấu hình đặt trong ```/etc/kubernetes/manifests```.
+- Không có đối tượng Pod, nhưng apiserver sẽ tạo ra 1 mirror pod để có thể quan sát.
+
+
 ### 15. Learn to troubleshoot Pods.
+```
+# get pod
+kubectl get pods
+
+# describe pod
+kubectl describe pod <pod-name>
+
+# check logs
+kubectl logs <pod-name>
+kubectl logs <pod-name> -c <container-name>
+
+# check container state
+
+# exec to container bash
+kubectl exec -it <pod-name> -- /bin/sh
+kubectl exec -it <pod-name> -- ping google.com
+
+# check probes (liveness, readness, startup)
+```
+
+
 ### 16. Pod Preemption & Priority.
+- đây là 2 tính năng trong k8s cho phép đánh priority để đảm bảo tài nguyên cho các ứng dụng quan trọng hơn khi tài nguyên bị giới hạn.
+- Pod Priority: thiết lập **PriorityClass** với value rồi gán cho Pod để đánh priority cho Pod đó. Pod có priority cao sẽ đc ưu tiên xử lý trước.
+- Pod Preemption: là qtrinh node loại bỏ các pod có priority thấp nhường tài nguyên cho các pod có priority cao hơn.
+  + cách hoạt động: khi tài nguyên bị giới hạn, k8s sẽ tìm các pod có priority thấp để giải phóng nhường tài nguyên cho các pod có priority cao. Thông báo tới các Pod này và có thời gian ngắn để giải phóng tài nguyên trc khi bị loại bỏ.
+
+### 17. Pod Disruption Budget.
+
+
+### 18. Pod Placement Using a Node Selector.
+
+
+### 19. Pod Affinity and Anti-affinity.
+
+
+### 20. Container Life Cycle Hooks.
 
 
 
