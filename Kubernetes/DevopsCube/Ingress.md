@@ -110,4 +110,55 @@ spec:
 
 - Từ đây có thể truy cập pod thông qua ```< IP pod >:5678``` hoặc ```< IP clusterIP >:5678``` hoặc ```apple.prod.viettq.com```
 
+### Hướng dẫn expose Nginx ra ngoài bằng ingress và clusterIP:
+- tạo pod:
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+    app: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+```
+- tạo service expose pod ra ngoài:
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP
+```
+- tạo ingress expose service ra ngoài:
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+spec:
+  rules:
+  - hosts: nginx.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-service
+            port:
+              number: 80
+```
+
 ## 2. Egress
