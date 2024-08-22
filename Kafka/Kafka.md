@@ -303,7 +303,13 @@ volumes:
     driver: local
 ```
 
-
+#### Các port được dùng:
+- 9092: Cổng chính cho client kết nối (PLAINTEXT).
+- 9093: Cổng cho SSL hoặc controller trong KRaft (cũng có thể dùng cho các kết nối mã hóa).
+- 2181: Cổng cho Zookeeper (trong các hệ thống sử dụng Zookeeper).
+- 9094: Dành cho giao tiếp nội bộ giữa các broker.
+- 9095: Cổng dành cho các kết nối có xác thực và mã hóa (SASL_PLAINTEXT hoặc SASL_SSL).
+- 2888 và 3888: Dùng cho giao tiếp nội bộ giữa các Zookeeper nodes.
 
 
 ## Backup - Restore:
@@ -395,7 +401,7 @@ Không thể tạo trực tiếp 1 consumer group, mà trong Kafka consumer grou
 Không có key: Đơn giản hóa quá trình publish message lên kafka, thứ tự của các message không quan trọng.
 
 
-## Docker
+## Docker: 
 ```
 docker network create -d bridge app-tier
 
@@ -474,3 +480,15 @@ docker run -d \
   -p 9093:9093 \
   bitnami/kafka:latest
 ```
+
+
+| 172.29.65.168 |
+| 172.29.68.179 |
+| 172.29.67.147 |
+
+
+systemctl stop guest-agent
+docker rm -f database
+vi /opt/guest-agent/datastore/manager/kafka/manager.py
+
+docker rm -f database; systemctl restart guest-agent;journalctl -f -u guest-agent
