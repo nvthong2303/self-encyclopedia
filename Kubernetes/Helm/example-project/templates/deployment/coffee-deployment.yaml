@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: coffee
+spec:
+    replicas: {{ .Values.replicas }}
+    selector: 
+        matchLabels:
+            app: coffee
+    template:
+        metadata:
+            labels:
+                app: coffee
+        spec:
+            containers:
+            - name: coffee
+              image: {{ .Values.hello.image }}:{{ .Values.version }}
+              ports:
+              - containerPort: 80
+              
+

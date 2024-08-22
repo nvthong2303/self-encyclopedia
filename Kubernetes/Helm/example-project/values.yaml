@@ -1,0 +1,4 @@
+replicas: 3
+version: 'plain-text'
+hello:
+  image: nginxdemos/hello
