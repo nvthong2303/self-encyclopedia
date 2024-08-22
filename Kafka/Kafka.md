@@ -89,7 +89,7 @@ Nếu muốn chỉ định nhiều consumer đọc từ cùng 1 partition thì c
     Giả sử 1 Topic với 3 partition và 1 group gồm 2 consumer. Với mỗi partition được gán cho 1 consumer và 1 partition còn lại gán cho consumer khác.
         - case1: consumer mới được thêm vào group, 
 
-## Các mô hình triển khai phổ biến
+## Các mô hình triển khai phổ biến:
 ### SingleCluster (1 broker + 1 zookeeper)
 Mô hình cơ bản có thể có 1 broker kafka hoặc 1 broker kafka + 1 zookeeper.
 
@@ -176,6 +176,7 @@ services:
     image: docker.io/bitnami/kafka:3.7
     ports:
       - "9092"
+      - "10000:9094"
     environment:
       # KRaft settings
       - KAFKA_CFG_NODE_ID=0
@@ -183,9 +184,10 @@ services:
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka-0:9093,1@kafka-1:9093,2@kafka-2:9093
       - KAFKA_KRAFT_CLUSTER_ID=abcdefghijklmnopqrstuv
       # Listeners
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-0:9092,EXTERNAL://127.0.0.1:10000
+      # - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
       # Clustering
@@ -194,10 +196,12 @@ services:
       - KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR=2
     volumes:
       - kafka_0_data:/bitnami/kafka
+      # - /Data/Data/kafka-backup/latest:/bitnami/kafka
   kafka-1:
     image: docker.io/bitnami/kafka:3.7
     ports:
       - "9092"
+      - "10001:9094"
     environment:
       # KRaft settings
       - KAFKA_CFG_NODE_ID=1
@@ -205,9 +209,9 @@ services:
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka-0:9093,1@kafka-1:9093,2@kafka-2:9093
       - KAFKA_KRAFT_CLUSTER_ID=abcdefghijklmnopqrstuv
       # Listeners
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9092,EXTERNAL://127.0.0.1:10001
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
       # Clustering
@@ -220,6 +224,7 @@ services:
     image: docker.io/bitnami/kafka:3.7
     ports:
       - "9092"
+      - "10002:9094"
     environment:
       # KRaft settings
       - KAFKA_CFG_NODE_ID=2
@@ -227,9 +232,9 @@ services:
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka-0:9093,1@kafka-1:9093,2@kafka-2:9093
       - KAFKA_KRAFT_CLUSTER_ID=abcdefghijklmnopqrstuv
       # Listeners
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9092,EXTERNAL://127.0.0.1:10002
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
       # Clustering
@@ -306,7 +311,7 @@ volumes:
 ## Xác thực trong Kafka:
 Sử dụng SASL 
 
-## Common Commands
+## Cheat sheet
 
 ### Kafka Topics
 
@@ -342,9 +347,9 @@ Sử dụng SASL
 ### Kafka Consumers
 
 - **Consume messages from a topic from the console**
-    ```sh
-    kafka-console-consumer.sh --topic my-topic --from-beginning --bootstrap-server localhost:9092
-    ```
+  ```sh
+  kafka-console-consumer.sh --topic my-topic --from-beginning --bootstrap-server localhost:9092
+  ```
   
 - **Get list consumer groups**
   ```sh
@@ -362,14 +367,14 @@ Không thể tạo trực tiếp 1 consumer group, mà trong Kafka consumer grou
 ### Kafka Broker
 
 - **Start a Kafka broker**
-    ```sh
-    kafka-server-start.sh config/server.properties
-    ```
+  ```sh
+  kafka-server-start.sh config/server.properties
+  ```
 
 - **Stop a Kafka broker**
-    ```sh
-    kafka-server-stop.sh
-    ```
+  ```sh
+  kafka-server-stop.sh
+  ```
 
 ### kafka Config
 
@@ -380,31 +385,37 @@ Không thể tạo trực tiếp 1 consumer group, mà trong Kafka consumer grou
 
 ## GUIDELINE:
 ### publish message key - without key:
-- khi publish message với key, key sẽ xác định partition message được gửi đến --> các message cùng key được phân phối đến cùng một partition, giữ thứ tự của chúng trong đó.
-- khi publish message không có key, Kafka sẽ tự động chọn partition theo round-robin, hoặc random. 
+- Khi Producer publish 1 message với key, key sẽ xác định partition message được gửi đến --> các message cùng key được phân phối đến cùng một partition, giữ thứ tự của chúng trong đó. Khi publish message không có key, Kafka sẽ tự động chọn partition theo round-robin, hoặc random. 
+
+- Các Consumer sẽ thuộc 1 Consumer-group, khi được gán consumer message từ 1 topic, các Consumer được phân bố để consumer tại các partition theo các cách chia khác nhau (tối ưu nhất là số lượng partition ~ số lượng consumer).
+- Tại các Topic sẽ đánh offset đã đọc theo Consumer-group, có thể thêm option để các consumer đọc message từ đầu hoặc từ offset của Consumer-group.
+- Message tồn tại trong topic trong khoảng Retention_time, hết nó tự động xóa.
 
 --> Có key: khi cần đảm bảo thứ tự các message liên quan đến cùng một Topic, hoặc khi muốn message được route đến 1 partition cụ thể
 Không có key: Đơn giản hóa quá trình publish message lên kafka, thứ tự của các message không quan trọng.
 
 
-
+## Docker
+```
+docker network create -d bridge app-tier
 
 docker run -d --name kafka \
   --network app-tier \
   -e KAFKA_ENABLE_KRAFT=yes \
   -e KAFKA_CFG_PROCESS_ROLES=controller,broker \
   -e KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER \
-  -e KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093 \
-  -e KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT \
+  -e KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094 \
+  -e KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT \
   -e KAFKA_CFG_BROKER_ID=0 \
-  -e KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@10.60.65.90:9093,1@10.60.65.91:9093,2@10.60.65.92:9093 \
-  -e KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://10.60.65.90:9092 \
+  -e KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@10.11.1.50:9093,1@10.11.1.51:9093,2@10.11.1.52:9093 \
+  -e KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://10.11.1.50:9092,EXTERNAL://10.11.1.50:9094 \
   -e ALLOW_PLAINTEXT_LISTENER=yes \
   -e KAFKA_KRAFT_CLUSTER_ID=abcdefghijklmnopqrstuv \
   -e KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT \
   -e KAFKA_CFG_NODE_ID=0 \
   -p 9092:9092 \
   -p 9093:9093 \
+  -p 9094:9094 \
   bitnami/kafka:latest
 
 docker run -d --name kafka \
@@ -413,16 +424,17 @@ docker run -d --name kafka \
   -e KAFKA_CFG_BROKER_ID=1 \
   -e KAFKA_CFG_NODE_ID=1 \
   -e KAFKA_KRAFT_CLUSTER_ID=abcdefghijklmnopqrstuv \
-  -e KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@10.60.65.90:9093,1@10.60.65.91:9093,2@10.60.65.92:9093 \
+  -e KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@10.11.1.50:9093,1@10.11.1.51:9093,2@10.11.1.52:9093 \
   -e KAFKA_CFG_PROCESS_ROLES=controller,broker \
   -e ALLOW_PLAINTEXT_LISTENER=yes \
-  -e KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093 \
-  -e KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://10.60.65.91:9092 \
-  -e KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT \
+  -e KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094 \
+  -e KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://10.11.1.51:9092,EXTERNAL://10.11.1.51:9094 \
+  -e KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT \
   -e KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER \
   -e KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT \
   -p 9092:9092 \
   -p 9093:9093 \
+  -p 9094:9094 \
   bitnami/kafka:latest
 
 docker run -d --name kafka \
@@ -431,26 +443,22 @@ docker run -d --name kafka \
   -e KAFKA_CFG_BROKER_ID=2 \
   -e KAFKA_CFG_NODE_ID=2 \
   -e KAFKA_KRAFT_CLUSTER_ID=abcdefghijklmnopqrstuv \
-  -e KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@10.60.65.90:9093,1@10.60.65.91:9093,2@10.60.65.92:9093 \
+  -e KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@10.11.1.50:9093,1@10.11.1.51:9093,2@10.11.1.52:9093 \
   -e KAFKA_CFG_PROCESS_ROLES=controller,broker \
   -e ALLOW_PLAINTEXT_LISTENER=yes \
-  -e KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093 \
-  -e KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://10.60.65.92:9092 \
-  -e KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT \
+  -e KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094 \
+  -e KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://10.11.1.52:9092,EXTERNAL://10.11.1.52:9094 \
+  -e KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT \
   -e KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT \
   -e KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER \
   -p 9092:9092 \
   -p 9093:9093 \
+  -p 9094:9094 \
   bitnami/kafka:latest
-
-
-| master | 172.29.68.182 |
-| slave | 172.29.66.105 |
-| slave | 172.29.67.25 |
-10.60.65.90, 10.60.65.91, 10.60.65.92
-
+```
 
 // single node
+```
 docker run -d \
   --network app-tier \
   --name kafka \
@@ -465,3 +473,4 @@ docker run -d \
   -p 9092:9092 \
   -p 9093:9093 \
   bitnami/kafka:latest
+```
