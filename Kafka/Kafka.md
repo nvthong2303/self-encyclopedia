@@ -389,6 +389,48 @@ Không thể tạo trực tiếp 1 consumer group, mà trong Kafka consumer grou
   kafka-configs.sh --bootstrap-server localhost:9092 --alter --entity-type topics --entity-name my-topic --add-config retention.ms=86400000
   ```
 
+### kafka reassign partitions:
+```kafka-topics.sh --describe --topic my-topic-1 --bootstrap-server localhost:9092```
+  ```
+  Topic: my-topic-1	TopicId: soLk7gfVRzOUfiQ93FVfow	PartitionCount: 3	ReplicationFactor: 3	Configs: 
+    Topic: my-topic-1	Partition: 0	Leader: 2	Replicas: 2,0,1	Isr: 2
+    Topic: my-topic-1	Partition: 1	Leader: 2	Replicas: 0,1,2	Isr: 2
+    Topic: my-topic-1	Partition: 2	Leader: 2	Replicas: 1,2,0	Isr: 2
+  ```
+  ```kafka-reassign-partitions.sh --bootstrap-server localhost:9092 --reassignment-json-file reassign.json --execute```
+  ```
+  Topic: my-topic-1	TopicId: soLk7gfVRzOUfiQ93FVfow	PartitionCount: 3	ReplicationFactor: 2	Configs: 
+    Topic: my-topic-1	Partition: 0	Leader: 2	Replicas: 1,2	Isr: 2
+    Topic: my-topic-1	Partition: 1	Leader: 2	Replicas: 0,2	Isr: 2
+    Topic: my-topic-1	Partition: 2	Leader: 2	Replicas: 1,2,0	Isr: 2
+  ```
+
+- Mô tả quá trình reassign trên:
+  - ban đầu: topic có 3 partitions, mỗi partition có 3 replicas.
+    - Leader : là broker chịu trách nhiệm chính
+    - Replicas : Các bản sao của partition
+    - ISR (In-Sync Replicas) : Replica đang kết nối đến Leader, sẵn sàng lên làm Leader Broker khi cần.
+  - sau khi reassign: số lượng replicas bị thay đổi.
+
+
+### kafka increase partitions:
+```
+root@5eb93e353f81:/tmp/mout$ kafka-topics.sh --create --topic my-topic --bootstrap-server localhost:9092 --partitions 2 --replication-factor 2
+Created topic my-topic.
+root@5eb93e353f81:/tmp/mout$ kafka-topics.sh --describe --topic my-topic --bootstrap-server localhost:9092
+Topic: my-topic	TopicId: ySAw3sk-QAWjcK9oPkuVuA	PartitionCount: 2	ReplicationFactor: 2	Configs: 
+	Topic: my-topic	Partition: 0	Leader: 0	Replicas: 0,1	Isr: 0,1
+	Topic: my-topic	Partition: 1	Leader: 1	Replicas: 1,2	Isr: 1,2
+root@5eb93e353f81:/tmp/mout$ kafka-topics.sh --topic my-topic --bootstrap-server localhost:9092 --alter --partitions 3
+root@5eb93e353f81:/tmp/mout$ kafka-topics.sh --describe --topic my-topic --bootstrap-server localhost:9092
+Topic: my-topic	TopicId: ySAw3sk-QAWjcK9oPkuVuA	PartitionCount: 3	ReplicationFactor: 2	Configs: 
+	Topic: my-topic	Partition: 0	Leader: 0	Replicas: 0,1	Isr: 0,1
+	Topic: my-topic	Partition: 1	Leader: 1	Replicas: 1,2	Isr: 1,2
+	Topic: my-topic	Partition: 2	Leader: 0	Replicas: 0,1	Isr: 0,1
+root@5eb93e353f81:/tmp/mout$ 
+
+```
+
 ## GUIDELINE:
 ### publish message key - without key:
 - Khi Producer publish 1 message với key, key sẽ xác định partition message được gửi đến --> các message cùng key được phân phối đến cùng một partition, giữ thứ tự của chúng trong đó. Khi publish message không có key, Kafka sẽ tự động chọn partition theo round-robin, hoặc random. 
@@ -492,3 +534,5 @@ docker rm -f database
 vi /opt/guest-agent/datastore/manager/kafka/manager.py
 
 docker rm -f database; systemctl restart guest-agent;journalctl -f -u guest-agent
+
+
