@@ -356,7 +356,13 @@ Sử dụng SASL
   ```sh
   kafka-console-consumer.sh --topic my-topic --from-beginning --bootstrap-server localhost:9092
   ```
-  
+
+- **Get Desribe all consumer group**
+  ```
+  kafka-consumer-groups.sh --bootstrap-server localhost:9092 --all-groups --describe
+  ```  
+
+
 - **Get list consumer groups**
   ```sh
   kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
