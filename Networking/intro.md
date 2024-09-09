@@ -58,5 +58,11 @@
 
 ## IP / Subnet / Submetmask
 
+### 1. Địa chỉ IP:
+- Địa chỉ IP gồm 32 bit nhị phân, chia thành 4 cụm 8 bit (octet). Chia thành 2 phần: phần network và host.
+- 
+
+### 2. SubnetMask:
+- Subnet Mask là một giá trị được sử dụng trong mạng máy tính để xác định phạm vi địa chỉ IP thuộc
 
 
