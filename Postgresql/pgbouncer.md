@@ -155,3 +155,9 @@ SQL script 2: mysql.sql
 ```
 - latency average giảm từ 29.338 ms --> 1.149 ms
 - latency stddev giảm từ 17.671 ms --> 0.785 ms
+
+## So sánh với PgPool-II:
+- PgPool-II hỗ trợ tính năng H/A, cache query và Load Balancing tốt hơn.
+- PgBouncer hỗ trợ connection pool, hạn chế tài nguyên và quản lý số lượng kết nối tốt hơn.
+- 
+
