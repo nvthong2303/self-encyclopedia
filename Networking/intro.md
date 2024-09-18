@@ -63,6 +63,24 @@
 - 
 
 ### 2. SubnetMask:
-- Subnet Mask là một giá trị được sử dụng trong mạng máy tính để xác định phạm vi địa chỉ IP thuộc
+- Subnet Mask là một giá trị được sử dụng trong mạng máy tính để xác định phạm vi địa chỉ IP thuộc phần mạng và phần host.
+
+
+### 3. Subnet:
+- là 1 phần của mạng lớn, tối ưu hóa việc quản lý địa chỉ IP và hiệu quả truyền tải gói tin, tăng bảo mật.
+- Ví dụ:
+    - trong VPC có 10.0.0.0/16 có 65536 địa chỉ (từ 10.0.0.0 đến 10.0.255.255)
+    - chia cho 2 public subnet và 2 private subnet:
+        - public subnet 1: 10.0.1.0/24 (dải: 10.0.1.0 đến 10.0.1.255)
+        - public subnet 2: 10.0.2.0/24 (dải: 10.0.2.0 đến 10.0.2.255)
+        - private subnet 1: 10.0.2.0/24 (dải: 10.0.3.0 đến 10.0.3.255)
+        - private subnet 2: 10.0.2.0/24 (dải: 10.0.4.0 đến 10.0.4.255)
+    - kết nối internet gateway:
+        - internet gateway kết nối với vpc để cho phép các public subnet giao tiếp với internet, các tài nguyên trong public subnet sẽ nhận IP public và truy cập từ internet.
+        - Nat gateway: đặt trong public subnet cho phép các tài nguyên trong private subnet ra ngoài internet, một chiều và bảo mật.
+
+    - các thiết bị trong các subnet khác nhau sẽ không cùng dải IP mà chỉ có cùng subnet mới cùng dải IP.
+    - các thiết bị trong các subnet khác nhau nhưng vẫn có thể ping tới nhau.
+
 
 
