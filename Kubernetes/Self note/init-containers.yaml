@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: "2024-09-11T07:06:54Z"
+  name: purple
+  namespace: default
+  resourceVersion: "1163"
+  uid: 8c6b0333-17c6-477f-8efc-5907e654776a
+spec:
+  containers:
+  - command:
+    - sh
+    - -c
+    - echo The app is running! && sleep 3600
+    image: busybox:1.28
+    imagePullPolicy: IfNotPresent
+    name: purple-container
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-92cnw
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  initContainers:
+  - command:
+    - sh
+    - -c
+    - sleep 600
+    image: busybox:1.28
+    imagePullPolicy: IfNotPresent
+    name: warm-up-1
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-92cnw
+      readOnly: true
+  - command:
+    - sh
+    - -c
+    - sleep 1200
+    image: busybox:1.28
+    imagePullPolicy: IfNotPresent
+    name: warm-up-2
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: kube-api-access-92cnw
+      readOnly: true
