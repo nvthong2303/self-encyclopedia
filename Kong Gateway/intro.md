@@ -85,18 +85,35 @@ Ví dụ:
 #### Consumers
 - User hoặc ứng dụng sử dụng APIs
 
+
+
 #### Plugins
-- các tính năng được thêm vào workflow của Kong.
+- Là các module được thiết kế cho các tính năng nâng cao được thêm vào workflow của Kong.
+- Scope Plugins:
+    - Services: 
+    - Routes:
+    - Consumers:
+    - Consumer groups:
+- 
 
 
 ### Các tính năng chính:
 #### Routing, Loadbalancing, health checking:
 #### Authentication, Authorization:
+- Key authentication: 
+
 #### Proxy, SSL/TLS, Connectivity:
 #### Plugins cho workflow Kong:
 #### Ingress Controller:
 #### Hibrid deployment, Declarative Databaseless Deployment:
 #### Ratelimit, Caching, Monitoring:
+- Rate limit: kiểm soát request từ client đến các service, upstreams nhằm tránh các cuộc tấn DOS, scrab web,
+    - Rate cơ bản: limit request theo thời gian
+    - Rate nâng cao: theo sliding windows, tích hợp redis để tăng hiệu suất và mở rộng.
+- Proxy caching: cải thiện hiệu suất bằng cách lưu trữ request từ dịch vụ upstreams, service theo loại, method.
+    - cach TTL: time to live
+    - các trạng thái cach: miss, hit, refresh, bypass.
+
 
 
 ## How it work ?
@@ -122,4 +139,32 @@ Ví dụ:
 - Cơ chế:
     - Health Check chủ động: Kong gửi các request giả lập để kiểm tra tình trạng của chúng.
     - Health Check thụ động: Kong theo dõi response của các request từ Client để đánh giá tình trạng của chúng.
+
+## Consumer:
+- đại diện cho ứng dụng client truy cập và kiểm soát, theo dõi các dịch vụ trong Kong.
+- Chức năng chính: 
+    - Quản lý quyền truy cập: Authen, JWT, Oath, ...
+    - Rate limit:
+    - Monitoring:
+    - 
+- Credentials là gì ? 
+
+## Kong Anatony:
+- Kong Data Plane: thành phần chịu trách nhiệm xử lý các API thực tế, đảm bảo các request được đến các service, upstreams, áp dụng các rules đã được cấu hình như rate limit, security, ..
+
+- Kong Control Plane: thành phần chịu trách nhiệm nhận cấu hình từ người quản trị, định nghĩa cách mà Kong xử lý các request, proxy, services, routes, plugins, consumers, .... Có 2 mô hình lưu trữ: DB và DB less.
+
+
+## Kong mode / DB vs DB Less Mode:
+- DB Mode:
+    - lưu trữ config, .... trong database (Cassandra / Postgre )
+    - PostgreSQL: dễ dàng vận hành, có dịch vụ quản lý trên cloud, phổ biến
+    - Cassandra: tối ưu, dễ dàng mở rộng theo chiều ngang
+    - Vẫn lưu cấu hình trong bộ nhớ.
+    - Khuyến nghị sử dụng GitOps.
+
+- DB-Less Mode:
+    - Không dùng database, mọi config đều lưu trữ trong bộ nhớ và các file config.
+    - Tương thích tốt với CI/CD
+    - Có hạn chế
 

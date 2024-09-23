@@ -53,9 +53,14 @@
 - ```http://localhost:8000/test-upstreams``` -> ```http://localhost:3000/health-check```
 
 
-
-
-
-
-
-
+### Consumer:
+#### Consumer Authenticated:
+- Cài đặt consumer authenticated cho API /users:
+    - Chọn routes:
+    - Install Plugin Key Authentication
+    - Tạo mới Consumer
+    - Tạo Credentials, tạo New Key Auth Credential
+    - Set apikey.
+    - Request đến route /user phải đi kèm params apikey="apikey"
+    ```http://localhost:8000/users?apikey=apikey```
+- 
