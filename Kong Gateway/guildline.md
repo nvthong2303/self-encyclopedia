@@ -63,4 +63,31 @@
     - Set apikey.
     - Request đến route /user phải đi kèm params apikey="apikey"
     ```http://localhost:8000/users?apikey=apikey```
-- 
+
+
+### Proxy cache:
+- Cache for scope Route:
+    - Chọn route:
+    - Install Plugin for route
+    - Check lại curl: 
+    ```
+    # call lần đầu tiên:
+    curl -i -s -XGET http://localhost:8000/api/get-count | grep X-Cache
+    X-Cache-Key: 4372f104bf961a6a8535
+    X-Cache-Status: Miss
+
+    # trong 30s tiếp, response trả về từ cache của Kong:
+    curl -i -s -XGET http://localhost:8000/api/get-count | grep X-Cache
+    X-Cache-Key: 4372f104bf961a6a8535
+    X-Cache-Status: Hit
+
+    # request tiếp theo sau khi cache hết hiệu lực:
+    curl -i -s -XGET http://localhost:8000/api/get-count | grep X-Cache
+    X-Cache-Key: 4372f104bf961a6a8535
+    X-Cache-Status: Refresh
+    ```
+- response phải trả về có Content Type: json/application hoặc text/plain mới đc cache.
+
+### Rate limit:
+
+

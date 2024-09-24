@@ -110,8 +110,26 @@ Ví dụ:
 - Rate limit: kiểm soát request từ client đến các service, upstreams nhằm tránh các cuộc tấn DOS, scrab web,
     - Rate cơ bản: limit request theo thời gian
     - Rate nâng cao: theo sliding windows, tích hợp redis để tăng hiệu suất và mở rộng.
+    - Thông số Plugin Specific Configuration: 
+        - Sync Rate: tần suất đồng bộ dữ liệu bộ đếm với center data store, mặc định: -1.
+        - Second / Minute / Hour / Day / Month / Year: Số lượng request xử lý mỗi ...
+        - Limit_by: 
+            - consumer (default): limit mỗi consumer thực hiện
+            - credential: limit theo credential (token, apikey, ...)
+            - service: limit số request service có thể xử lý
+            - header: limit theo 1 header
+                - header_name
+            - path: limit theo path
+            - ip: 
+        - Policy: local / cluster / redis: dùng truy xuất và tăng limit
+        - Redis:
+            - host
+            - port
+            - time
+        - Other config ....
+
 - Proxy caching: cải thiện hiệu suất bằng cách lưu trữ request từ dịch vụ upstreams, service theo loại, method.
-    - cach TTL: time to live
+    - cache TTL: time to live
     - các trạng thái cach: miss, hit, refresh, bypass.
 
 
@@ -167,4 +185,8 @@ Ví dụ:
     - Không dùng database, mọi config đều lưu trữ trong bộ nhớ và các file config.
     - Tương thích tốt với CI/CD
     - Có hạn chế
+
+
+## Kong SNIs (Server Name Indications): 
+- 
 
