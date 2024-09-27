@@ -1,3 +1,5 @@
+# Python advanced:
+
 ## Iterable / Iterator / Generator:
 - trong python, có thể chia các datatype thành 2 nhóm:
     - sequence: string, list, ... cho phép truy cập đến các phần tử bằng index (từ 0 > length -1).
@@ -48,12 +50,79 @@
     ```
 
 ## Decorators
-- 
+- Công cụ giúp thay đổi hành vi của một hàm / phương thức mà không làm thay đổi mã nguồn của hàm đó. Triển khai bằng cách sử dụng 1 hàm bọc lấy 1 hàm khác, Decorators thường nhận 1 hàm là input, và trả về 1 hàm
+- exp: 
+    ```
+    def my_decorator(func):
+        def wrapper():
+            print("Something before the function is called.")
+            func()
+            print("Something after the function is called.")
+        return wrapper
 
+    @my_decorator
+    def say_hello():
+        print("Hello!")
+
+    say_hello()
+   ```
+
+- truyền tham số vào Decorators:
+    ```
+    def my_decorator(func):
+        def wrapper(*args, **kwargs):
+            print("Trước khi gọi hàm.")
+            result = func(*args, **kwargs)
+            print("Sau khi gọi hàm.")
+            return result
+        return wrapper
+
+    @my_decorator
+    def say_hello(name):
+        print(f"Xin chào, {name}!")
+
+    say_hello("Thắng")
+
+    ```
+
+- Decorators lồng nhau: 
+    ```
+    def decorator_1(func):
+        def wrapper():
+            print("Decorator 1")
+            func()
+        return wrapper
+
+    def decorator_2(func):
+        def wrapper():
+            print("Decorator 2")
+            func()
+        return wrapper
+
+    @decorator_1
+    @decorator_2
+    def say_hello():
+        print("Hello!")
+
+    say_hello()
+    ```
 
 ## Collections
+- module cung cấp các kiểu dữ liệu đặc biệt được thiết kế để giải quyết một số bài toán phổ biến: list, tuple, dict, ...
+- các method phổ biến:
+    - namedtuple: tạo tuple có tên cho từng field, dễ dàng truy cập theo tên thay vì index
+    - deque: tạo một queue 2 đầu, cho phép thêm, xóa các phần tử ở cả 2 đầu với độ phức tạp O(1).
+    - Counter: 1 dict chuyên đếm số lần xuất hiện của mỗi phần tử trong một iterable.
+    - OdererDict: 1 dict lưu trữ các phần tử theo thứ tự đi kèm, không như dict thông thường.
+    - defaultDict: 1 dict cho phép gán giá trị mặc định cho các key không tồn tại
+    - ChainMap: một lợp quản lý nhiều dict như 1 chuỗi ánh xạ đơn lẻ. 
+
 ## Generators
+
 ## Magic methods
-## Threading
+- là các phương thức đặc biệt, có thể định nghĩa trong các lớp để cho phép các đối tượng của lớp tương tác với cú pháp hoặc method đặc biệt.
+- thường có dạng __ name__, Ví dụ : __ init__, __ str__, __ repr__, ...
+- cung cấp các phương thức để tích hợp hành vi phức tạp vào các object của lớp, giúp chúng hoạt động như các kiểu dữ liệu tiêu chuẩn, tăng tính linh hoạt, dễ sử dụng hoặc tạo ra các method tùy chỉnh cho object.
+
 ## Regular expression
 

@@ -106,7 +106,7 @@ from itertools import compress, cycle, count, repeat, product, permutations, com
 
 
 ## count
-counter = count(10, 2)
+# counter = count(10, 2)
 # print(next(counter))  # 10
 # print(next(counter))  # 12
 # print(next(counter))  # 14
@@ -123,3 +123,39 @@ counter = count(10, 2)
 # threading
 # regular expression
 
+# def func_a():
+#     return "I was angry with my friend."
+
+
+# def func_b():
+#     return "I told my wrath, my wrath did end"
+
+
+# def func_c(*funcs):
+#     for func in funcs:
+#         print(func())
+
+
+# main_func = func_c
+# main_func(func_a, func_b)
+
+
+from collections import namedtuple, Counter
+
+# Person = namedtuple("Person", ["name", "age", "address"])
+# p = Person("Thong", 22, "Hanoi")
+
+# x = ("Thong", 22, "Hanoi")
+# o = {
+#     "name": "Thong",
+#     "age": 22,
+#     "address": "Hanoi"
+# }
+
+# print(p)
+# print(p.name)
+# print(x[0])
+# print(o["name"])
+c = Counter("Thong Nguyen Van CMC telecom Ha Noi Viet Nam")
+
+print(c)

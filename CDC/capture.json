@@ -1,0 +1,766 @@
+[
+  {
+    "schema": {
+      "type": "struct",
+      "fields": [
+        {
+          "type": "struct",
+          "fields": [
+            {
+              "type": "int32",
+              "optional": false,
+              "default": 0,
+              "field": "id"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "email"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "name"
+            }
+          ],
+          "optional": true,
+          "name": "cdc-using-debezium-topic.public.User.Value",
+          "field": "before"
+        },
+        {
+          "type": "struct",
+          "fields": [
+            {
+              "type": "int32",
+              "optional": false,
+              "default": 0,
+              "field": "id"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "email"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "name"
+            }
+          ],
+          "optional": true,
+          "name": "cdc-using-debezium-topic.public.User.Value",
+          "field": "after"
+        },
+        {
+          "type": "struct",
+          "fields": [
+            {
+              "type": "string",
+              "optional": false,
+              "field": "version"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "connector"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "name"
+            },
+            {
+              "type": "int64",
+              "optional": false,
+              "field": "ts_ms"
+            },
+            {
+              "type": "string",
+              "optional": true,
+              "name": "io.debezium.data.Enum",
+              "version": 1,
+              "parameters": {
+                "allowed": "true,last,false,incremental"
+              },
+              "default": "false",
+              "field": "snapshot"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "db"
+            },
+            {
+              "type": "string",
+              "optional": true,
+              "field": "sequence"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "schema"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "table"
+            },
+            {
+              "type": "int64",
+              "optional": true,
+              "field": "txId"
+            },
+            {
+              "type": "int64",
+              "optional": true,
+              "field": "lsn"
+            },
+            {
+              "type": "int64",
+              "optional": true,
+              "field": "xmin"
+            }
+          ],
+          "optional": false,
+          "name": "io.debezium.connector.postgresql.Source",
+          "field": "source"
+        },
+        {
+          "type": "string",
+          "optional": false,
+          "field": "op"
+        },
+        {
+          "type": "int64",
+          "optional": true,
+          "field": "ts_ms"
+        },
+        {
+          "type": "struct",
+          "fields": [
+            {
+              "type": "string",
+              "optional": false,
+              "field": "id"
+            },
+            {
+              "type": "int64",
+              "optional": false,
+              "field": "total_order"
+            },
+            {
+              "type": "int64",
+              "optional": false,
+              "field": "data_collection_order"
+            }
+          ],
+          "optional": true,
+          "name": "event.block",
+          "version": 1,
+          "field": "transaction"
+        }
+      ],
+      "optional": false,
+      "name": "cdc-using-debezium-topic.public.User.Envelope",
+      "version": 1
+    },
+    "payload": {
+      "before": null,
+      "after": {
+        "id": 1,
+        "email": "ehasan+1@firecrackervocabulary.com",
+        "name": "name_649"
+      },
+      "source": {
+        "version": "2.3.4.Final",
+        "connector": "postgresql",
+        "name": "cdc-using-debezium-topic",
+        "ts_ms": 1727262197160,
+        "snapshot": "false",
+        "db": "cdc-using-debezium",
+        "sequence": "[\"24716496\",\"24716600\"]",
+        "schema": "public",
+        "table": "User",
+        "txId": 572,
+        "lsn": 24716600,
+        "xmin": null
+      },
+      "op": "c",
+      "ts_ms": 1727262197450,
+      "transaction": null
+    }
+  },
+  {
+    "schema": {
+      "type": "struct",
+      "fields": [
+        {
+          "type": "struct",
+          "fields": [
+            {
+              "type": "int32",
+              "optional": false,
+              "default": 0,
+              "field": "id"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "email"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "name"
+            }
+          ],
+          "optional": true,
+          "name": "cdc-using-debezium-topic.public.User.Value",
+          "field": "before"
+        },
+        {
+          "type": "struct",
+          "fields": [
+            {
+              "type": "int32",
+              "optional": false,
+              "default": 0,
+              "field": "id"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "email"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "name"
+            }
+          ],
+          "optional": true,
+          "name": "cdc-using-debezium-topic.public.User.Value",
+          "field": "after"
+        },
+        {
+          "type": "struct",
+          "fields": [
+            {
+              "type": "string",
+              "optional": false,
+              "field": "version"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "connector"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "name"
+            },
+            {
+              "type": "int64",
+              "optional": false,
+              "field": "ts_ms"
+            },
+            {
+              "type": "string",
+              "optional": true,
+              "name": "io.debezium.data.Enum",
+              "version": 1,
+              "parameters": {
+                "allowed": "true,last,false,incremental"
+              },
+              "default": "false",
+              "field": "snapshot"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "db"
+            },
+            {
+              "type": "string",
+              "optional": true,
+              "field": "sequence"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "schema"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "table"
+            },
+            {
+              "type": "int64",
+              "optional": true,
+              "field": "txId"
+            },
+            {
+              "type": "int64",
+              "optional": true,
+              "field": "lsn"
+            },
+            {
+              "type": "int64",
+              "optional": true,
+              "field": "xmin"
+            }
+          ],
+          "optional": false,
+          "name": "io.debezium.connector.postgresql.Source",
+          "field": "source"
+        },
+        {
+          "type": "string",
+          "optional": false,
+          "field": "op"
+        },
+        {
+          "type": "int64",
+          "optional": true,
+          "field": "ts_ms"
+        },
+        {
+          "type": "struct",
+          "fields": [
+            {
+              "type": "string",
+              "optional": false,
+              "field": "id"
+            },
+            {
+              "type": "int64",
+              "optional": false,
+              "field": "total_order"
+            },
+            {
+              "type": "int64",
+              "optional": false,
+              "field": "data_collection_order"
+            }
+          ],
+          "optional": true,
+          "name": "event.block",
+          "version": 1,
+          "field": "transaction"
+        }
+      ],
+      "optional": false,
+      "name": "cdc-using-debezium-topic.public.User.Envelope",
+      "version": 1
+    },
+    "payload": {
+      "before": null,
+      "after": {
+        "id": 2,
+        "email": "ehasan+2@firecrackervocabulary.com",
+        "name": "name_2"
+      },
+      "source": {
+        "version": "2.3.4.Final",
+        "connector": "postgresql",
+        "name": "cdc-using-debezium-topic",
+        "ts_ms": 1727262197170,
+        "snapshot": "false",
+        "db": "cdc-using-debezium",
+        "sequence": "[\"24717152\",\"24717152\"]",
+        "schema": "public",
+        "table": "User",
+        "txId": 573,
+        "lsn": 24717152,
+        "xmin": null
+      },
+      "op": "c",
+      "ts_ms": 1727262197455,
+      "transaction": null
+    }
+  },
+  {
+    "schema": {
+      "type": "struct",
+      "fields": [
+        {
+          "type": "struct",
+          "fields": [
+            {
+              "type": "int32",
+              "optional": false,
+              "default": 0,
+              "field": "id"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "email"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "name"
+            }
+          ],
+          "optional": true,
+          "name": "cdc-using-debezium-topic.public.User.Value",
+          "field": "before"
+        },
+        {
+          "type": "struct",
+          "fields": [
+            {
+              "type": "int32",
+              "optional": false,
+              "default": 0,
+              "field": "id"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "email"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "name"
+            }
+          ],
+          "optional": true,
+          "name": "cdc-using-debezium-topic.public.User.Value",
+          "field": "after"
+        },
+        {
+          "type": "struct",
+          "fields": [
+            {
+              "type": "string",
+              "optional": false,
+              "field": "version"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "connector"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "name"
+            },
+            {
+              "type": "int64",
+              "optional": false,
+              "field": "ts_ms"
+            },
+            {
+              "type": "string",
+              "optional": true,
+              "name": "io.debezium.data.Enum",
+              "version": 1,
+              "parameters": {
+                "allowed": "true,last,false,incremental"
+              },
+              "default": "false",
+              "field": "snapshot"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "db"
+            },
+            {
+              "type": "string",
+              "optional": true,
+              "field": "sequence"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "schema"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "table"
+            },
+            {
+              "type": "int64",
+              "optional": true,
+              "field": "txId"
+            },
+            {
+              "type": "int64",
+              "optional": true,
+              "field": "lsn"
+            },
+            {
+              "type": "int64",
+              "optional": true,
+              "field": "xmin"
+            }
+          ],
+          "optional": false,
+          "name": "io.debezium.connector.postgresql.Source",
+          "field": "source"
+        },
+        {
+          "type": "string",
+          "optional": false,
+          "field": "op"
+        },
+        {
+          "type": "int64",
+          "optional": true,
+          "field": "ts_ms"
+        },
+        {
+          "type": "struct",
+          "fields": [
+            {
+              "type": "string",
+              "optional": false,
+              "field": "id"
+            },
+            {
+              "type": "int64",
+              "optional": false,
+              "field": "total_order"
+            },
+            {
+              "type": "int64",
+              "optional": false,
+              "field": "data_collection_order"
+            }
+          ],
+          "optional": true,
+          "name": "event.block",
+          "version": 1,
+          "field": "transaction"
+        }
+      ],
+      "optional": false,
+      "name": "cdc-using-debezium-topic.public.User.Envelope",
+      "version": 1
+    },
+    "payload": {
+      "before": null,
+      "after": {
+        "id": 2,
+        "email": "ehasan+2@firecrackervocabulary.com",
+        "name": "name_20"
+      },
+      "source": {
+        "version": "2.3.4.Final",
+        "connector": "postgresql",
+        "name": "cdc-using-debezium-topic",
+        "ts_ms": 1727262197177,
+        "snapshot": "false",
+        "db": "cdc-using-debezium",
+        "sequence": "[\"24717464\",\"24717464\"]",
+        "schema": "public",
+        "table": "User",
+        "txId": 574,
+        "lsn": 24717464,
+        "xmin": null
+      },
+      "op": "u",
+      "ts_ms": 1727262197455,
+      "transaction": null
+    }
+  },
+  {
+    "schema": {
+      "type": "struct",
+      "fields": [
+        {
+          "type": "struct",
+          "fields": [
+            {
+              "type": "int32",
+              "optional": false,
+              "default": 0,
+              "field": "id"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "email"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "name"
+            }
+          ],
+          "optional": true,
+          "name": "cdc-using-debezium-topic.public.User.Value",
+          "field": "before"
+        },
+        {
+          "type": "struct",
+          "fields": [
+            {
+              "type": "int32",
+              "optional": false,
+              "default": 0,
+              "field": "id"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "email"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "name"
+            }
+          ],
+          "optional": true,
+          "name": "cdc-using-debezium-topic.public.User.Value",
+          "field": "after"
+        },
+        {
+          "type": "struct",
+          "fields": [
+            {
+              "type": "string",
+              "optional": false,
+              "field": "version"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "connector"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "name"
+            },
+            {
+              "type": "int64",
+              "optional": false,
+              "field": "ts_ms"
+            },
+            {
+              "type": "string",
+              "optional": true,
+              "name": "io.debezium.data.Enum",
+              "version": 1,
+              "parameters": {
+                "allowed": "true,last,false,incremental"
+              },
+              "default": "false",
+              "field": "snapshot"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "db"
+            },
+            {
+              "type": "string",
+              "optional": true,
+              "field": "sequence"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "schema"
+            },
+            {
+              "type": "string",
+              "optional": false,
+              "field": "table"
+            },
+            {
+              "type": "int64",
+              "optional": true,
+              "field": "txId"
+            },
+            {
+              "type": "int64",
+              "optional": true,
+              "field": "lsn"
+            },
+            {
+              "type": "int64",
+              "optional": true,
+              "field": "xmin"
+            }
+          ],
+          "optional": false,
+          "name": "io.debezium.connector.postgresql.Source",
+          "field": "source"
+        },
+        {
+          "type": "string",
+          "optional": false,
+          "field": "op"
+        },
+        {
+          "type": "int64",
+          "optional": true,
+          "field": "ts_ms"
+        },
+        {
+          "type": "struct",
+          "fields": [
+            {
+              "type": "string",
+              "optional": false,
+              "field": "id"
+            },
+            {
+              "type": "int64",
+              "optional": false,
+              "field": "total_order"
+            },
+            {
+              "type": "int64",
+              "optional": false,
+              "field": "data_collection_order"
+            }
+          ],
+          "optional": true,
+          "name": "event.block",
+          "version": 1,
+          "field": "transaction"
+        }
+      ],
+      "optional": false,
+      "name": "cdc-using-debezium-topic.public.User.Envelope",
+      "version": 1
+    },
+    "payload": {
+      "before": {
+        "id": 2,
+        "email": "",
+        "name": ""
+      },
+      "after": null,
+      "source": {
+        "version": "2.3.4.Final",
+        "connector": "postgresql",
+        "name": "cdc-using-debezium-topic",
+        "ts_ms": 1727262197181,
+        "snapshot": "false",
+        "db": "cdc-using-debezium",
+        "sequence": "[\"24717632\",\"24717632\"]",
+        "schema": "public",
+        "table": "User",
+        "txId": 575,
+        "lsn": 24717632,
+        "xmin": null
+      },
+      "op": "d",
+      "ts_ms": 1727262197456,
+      "transaction": null
+    }
+  }
+]
