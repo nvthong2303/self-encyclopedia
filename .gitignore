@@ -4,3 +4,7 @@ Kubernetes/Kubernetes-devopsvn/EX1/app/node_modules/*
 
 Connection Pool/Nodejs/node_modules/.package-lock.json
 Connection Pool/Nodejs/node_modules/*
+
+
+Pythornhub/FastAPI-Clean-Example/fastapi/*
+Pythornhub/FastAPI-Clean-Example/__pycache__/*
