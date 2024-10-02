@@ -12,6 +12,8 @@ python-dotenv = "==0.20.0"
 strawberry-graphql = {extras = ["fastapi"], version = "==0.114.0"}
 psycopg2-binary = "*"
 psycopg2 = "*"
+python-jose = {extras = ["cryptography"], version = "*"}
+passlib = {extras = ["bcrypt"], version = "*"}
 
 [dev-packages]
 pre-commit = "==2.18.1"
