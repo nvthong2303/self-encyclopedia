@@ -8,3 +8,6 @@ Connection Pool/Nodejs/node_modules/*
 
 Pythornhub/FastAPI-Clean-Example/fastapi/*
 Pythornhub/FastAPI-Clean-Example/__pycache__/*
+
+Pythornhub/FastAPI/venv/*
+
