@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+message News {
+    string id = 1;
+    string title = 3;
+    string body = 2;
+    string postImage = 4;
+}
+
+message Empty {}
+
+message NewsList {
+   repeated News news = 1;
+}
+
+message NewsRequest {
+    string id = 1;
+}
+
+message NewsResponse {
+    News news = 1;
+}
+
+message AddNewsRequest {
+    string title = 1;
+    string body = 2;
+    string postImage = 3;
+}
+
+message EditNewsRequest {
+    string id = 1;
+    string title = 2;
+    string body = 3;
+    string postImage = 4;
+}
+
+message DeleteNewsRequest {
+    string id = 1;
+}
+
+service NewsService {
+    rpc GetAllNews (Empty) returns (NewsList) {}
+    rpc getNewsById (NewsRequest) returns (NewsResponse) {}
+    rpc AddNews (AddNewsRequest) returns (NewsResponse) {}
+    rpc EditNews (EditNewsRequest) returns (NewsResponse) {}
+    rpc DeleteNews (DeleteNewsRequest) returns (Empty) {}
+}

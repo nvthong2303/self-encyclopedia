@@ -11,3 +11,6 @@ Pythornhub/FastAPI-Clean-Example/__pycache__/*
 
 Pythornhub/FastAPI/venv/*
 
+*/node_modules/*
+gRPC/Nodejs/grpc-nodejs/node_modules/*
+gRPC/Nodejs/grpc-nodejs/node_modules/*
