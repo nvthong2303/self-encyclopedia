@@ -14,3 +14,6 @@ Pythornhub/FastAPI/venv/*
 */node_modules/*
 gRPC/Nodejs/grpc-nodejs/node_modules/*
 gRPC/Nodejs/grpc-nodejs/node_modules/*
+
+node_modules/*
+package-lock.json

@@ -1,0 +1,24 @@
+{
+  "name": "self-encyclopedia",
+  "version": "1.0.0",
+  "description": "Không có gì đặc biệt, tôi tự học mọi thứ và notes hết chúng lại ở đây.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@elastic/ecs-winston-format": "^1.5.3",
+    "@grpc/grpc-js": "^1.12.2",
+    "elasticsearch": "^16.7.3",
+    "get-json": "^1.1.0",
+    "got": "^14.4.3",
+    "mongodb": "^6.8.0",
+    "pg": "^8.12.0",
+    "pg-pool": "^3.6.2",
+    "redis": "^4.6.15",
+    "winston": "^3.16.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
