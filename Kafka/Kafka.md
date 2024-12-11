@@ -12,12 +12,12 @@ Kafka broker là một server kafka, một cụm kafka bao gồm nhiều broker.
 
 ### Topic
 Topic, dùng để lưu trữ các message, các message được gửi vào 1 Topic được phân loại và xử lý theo các quy tắc khác nhau.
-Topic, 
+Topic,
 
 ### Partition
 Partition, trong mỗi Topic có thể được chia thành nhiều partition. Partition là đơn vị lưu trữ "MẢNG" có thứ tự các message. Và được phân bố đều trên các broker.
 
-Trong partition, mỗi message có offset duy nhất (~index) không thay đổi được, mỗi message thêm vào partition được thêm vào commit log. 
+Trong partition, mỗi message có offset duy nhất (~index) không thay đổi được, mỗi message thêm vào partition được thêm vào commit log.
 
 Một message được gửi đến Topic, nó sẽ được xác định partition thông qua thuật toán mã hóa hoặc round-robin, đảm bảo phân phối đều giữa các partition trong Topic.
 
@@ -45,7 +45,7 @@ Zookeeper, 1 dịch vụ quản lý các dịch vụ phân tán.
 
 Vai trò:
 - Lưu trữ thông tin của kafka broker, topic, partition, ...
-- Thực hiện leader election cho các partition () 
+- Thực hiện leader election cho các partition ()
 - Gửi thông tin đến kafka về các event hệ thống: new topic, delete topic, broker die, ...
 
 Kafka có thể hoạt động mà không có zookeeper không ? có
@@ -59,7 +59,7 @@ Consumer muốn đọc message cần kết nối đến 1 broker, zookeeper giú
 ### Documentation
 #### Topics and logs
 Kafka cluster lưu trữ lại tất cả message được publish cho dù chúng đã được consum hay chưa trong 1 khoảng thời gian (theo cấu hình).
-MetaData duy nhất được giữ lại là offset, được kiểm soát bởi consumer, thông thường consumer sẽ tăng offset bằng cách đọc message tuy nhiên trong thực tế thì offset này do consumer kiểm soát và nó có thể sử dụng message theo thứ tự mà consumer muốn (có thể reset offset về vị trí cũ để xử lý lại khi cần). 
+MetaData duy nhất được giữ lại là offset, được kiểm soát bởi consumer, thông thường consumer sẽ tăng offset bằng cách đọc message tuy nhiên trong thực tế thì offset này do consumer kiểm soát và nó có thể sử dụng message theo thứ tự mà consumer muốn (có thể reset offset về vị trí cũ để xử lý lại khi cần).
 
 "Consumers are very cheap", tức là consumer không ảnh hưởng nhiều đến cluster và các consumer khác.
 
@@ -85,9 +85,9 @@ Nếu muốn chỉ định nhiều consumer đọc từ cùng 1 partition thì c
 
 ### Q/A
 - Có băt buộc phải có Group Consumer không ? Có, nếu không đặt groupId sẽ bị exeption.
-- Khi một consumer mới tham gia vào group, partition được phân bổ ntn ? 
+- Khi một consumer mới tham gia vào group, partition được phân bổ ntn ?
     Giả sử 1 Topic với 3 partition và 1 group gồm 2 consumer. Với mỗi partition được gán cho 1 consumer và 1 partition còn lại gán cho consumer khác.
-        - case1: consumer mới được thêm vào group, 
+        - case1: consumer mới được thêm vào group,
 
 ## Các mô hình triển khai phổ biến:
 ### SingleCluster (1 broker + 1 zookeeper)
@@ -315,7 +315,7 @@ volumes:
 ## Backup - Restore:
 
 ## Xác thực trong Kafka:
-Sử dụng SASL 
+Sử dụng SASL
 
 ## Cheat sheet
 
@@ -360,7 +360,7 @@ Sử dụng SASL
 - **Get Desribe all consumer group**
   ```
   kafka-consumer-groups.sh --bootstrap-server localhost:9092 --all-groups --describe
-  ```  
+  ```
 
 
 - **Get list consumer groups**
@@ -396,16 +396,16 @@ Không thể tạo trực tiếp 1 consumer group, mà trong Kafka consumer grou
   ```
 
 ### kafka reassign partitions:
-```kafka-topics.sh --describe --topic my-topic-1 --bootstrap-server localhost:9092```
+  ```kafka-topics.sh --describe --topic my-topic-1 --bootstrap-server localhost:9092```
   ```
-  Topic: my-topic-1	TopicId: soLk7gfVRzOUfiQ93FVfow	PartitionCount: 3	ReplicationFactor: 3	Configs: 
+  Topic: my-topic-1	TopicId: soLk7gfVRzOUfiQ93FVfow	PartitionCount: 3	ReplicationFactor: 3	Configs:
     Topic: my-topic-1	Partition: 0	Leader: 2	Replicas: 2,0,1	Isr: 2
     Topic: my-topic-1	Partition: 1	Leader: 2	Replicas: 0,1,2	Isr: 2
     Topic: my-topic-1	Partition: 2	Leader: 2	Replicas: 1,2,0	Isr: 2
   ```
   ```kafka-reassign-partitions.sh --bootstrap-server localhost:9092 --reassignment-json-file reassign.json --execute```
   ```
-  Topic: my-topic-1	TopicId: soLk7gfVRzOUfiQ93FVfow	PartitionCount: 3	ReplicationFactor: 2	Configs: 
+  Topic: my-topic-1	TopicId: soLk7gfVRzOUfiQ93FVfow	PartitionCount: 3	ReplicationFactor: 2	Configs:
     Topic: my-topic-1	Partition: 0	Leader: 2	Replicas: 1,2	Isr: 2
     Topic: my-topic-1	Partition: 1	Leader: 2	Replicas: 0,2	Isr: 2
     Topic: my-topic-1	Partition: 2	Leader: 2	Replicas: 1,2,0	Isr: 2
@@ -420,26 +420,49 @@ Không thể tạo trực tiếp 1 consumer group, mà trong Kafka consumer grou
 
 
 ### kafka increase partitions:
-```
-root@5eb93e353f81:/tmp/mout$ kafka-topics.sh --create --topic my-topic --bootstrap-server localhost:9092 --partitions 2 --replication-factor 2
-Created topic my-topic.
-root@5eb93e353f81:/tmp/mout$ kafka-topics.sh --describe --topic my-topic --bootstrap-server localhost:9092
-Topic: my-topic	TopicId: ySAw3sk-QAWjcK9oPkuVuA	PartitionCount: 2	ReplicationFactor: 2	Configs: 
-	Topic: my-topic	Partition: 0	Leader: 0	Replicas: 0,1	Isr: 0,1
-	Topic: my-topic	Partition: 1	Leader: 1	Replicas: 1,2	Isr: 1,2
-root@5eb93e353f81:/tmp/mout$ kafka-topics.sh --topic my-topic --bootstrap-server localhost:9092 --alter --partitions 3
-root@5eb93e353f81:/tmp/mout$ kafka-topics.sh --describe --topic my-topic --bootstrap-server localhost:9092
-Topic: my-topic	TopicId: ySAw3sk-QAWjcK9oPkuVuA	PartitionCount: 3	ReplicationFactor: 2	Configs: 
-	Topic: my-topic	Partition: 0	Leader: 0	Replicas: 0,1	Isr: 0,1
-	Topic: my-topic	Partition: 1	Leader: 1	Replicas: 1,2	Isr: 1,2
-	Topic: my-topic	Partition: 2	Leader: 0	Replicas: 0,1	Isr: 0,1
-root@5eb93e353f81:/tmp/mout$ 
+  ```
+  root@5eb93e353f81:/tmp/mout$ kafka-topics.sh --create --topic my-topic --bootstrap-server localhost:9092 --partitions 2 --replication-factor 2
+  Created topic my-topic.
+  root@5eb93e353f81:/tmp/mout$ kafka-topics.sh --describe --topic my-topic --bootstrap-server localhost:9092
+  Topic: my-topic	TopicId: ySAw3sk-QAWjcK9oPkuVuA	PartitionCount: 2	ReplicationFactor: 2	Configs:
+    Topic: my-topic	Partition: 0	Leader: 0	Replicas: 0,1	Isr: 0,1
+    Topic: my-topic	Partition: 1	Leader: 1	Replicas: 1,2	Isr: 1,2
+  root@5eb93e353f81:/tmp/mout$ kafka-topics.sh --topic my-topic --bootstrap-server localhost:9092 --alter --partitions 3
+  root@5eb93e353f81:/tmp/mout$ kafka-topics.sh --describe --topic my-topic --bootstrap-server localhost:9092
+  Topic: my-topic	TopicId: ySAw3sk-QAWjcK9oPkuVuA	PartitionCount: 3	ReplicationFactor: 2	Configs:
+    Topic: my-topic	Partition: 0	Leader: 0	Replicas: 0,1	Isr: 0,1
+    Topic: my-topic	Partition: 1	Leader: 1	Replicas: 1,2	Isr: 1,2
+    Topic: my-topic	Partition: 2	Leader: 0	Replicas: 0,1	Isr: 0,1
+  root@5eb93e353f81:/tmp/mout$
 
+  ```
+
+### Notes
+- với mode enable SASL, CLI cần thêm flag path client.conf với:
 ```
+# cli producer
+--producer.config /etc/kafka_client.conf
+# cli consumer
+--consumer.config /etc/kafka_client.conf
+# cli khác (chưa verify hết)
+--command-config /etc/kafka_client.conf
+```
+- với nội dùng kafka_client.conf:
+```
+sasl.mechanism=PLAIN
+# Configure SASL_SSL if TLS/SSL encryption is enabled, otherwise configure SASL_PLAINTEXT
+security.protocol=SASL_PLAINTEXT
+
+sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required \
+  username="CtelRnDDefaultUser" \
+  password="CtelRnDDefaultUserPassword";
+```
+
+
 
 ## GUIDELINE:
 ### publish message key - without key:
-- Khi Producer publish 1 message với key, key sẽ xác định partition message được gửi đến --> các message cùng key được phân phối đến cùng một partition, giữ thứ tự của chúng trong đó. Khi publish message không có key, Kafka sẽ tự động chọn partition theo round-robin, hoặc random. 
+- Khi Producer publish 1 message với key, key sẽ xác định partition message được gửi đến --> các message cùng key được phân phối đến cùng một partition, giữ thứ tự của chúng trong đó. Khi publish message không có key, Kafka sẽ tự động chọn partition theo round-robin, hoặc random.
 
 - Các Consumer sẽ thuộc 1 Consumer-group, khi được gán consumer message từ 1 topic, các Consumer được phân bố để consumer tại các partition theo các cách chia khác nhau (tối ưu nhất là số lượng partition ~ số lượng consumer).
 - Tại các Topic sẽ đánh offset đã đọc theo Consumer-group, có thể thêm option để các consumer đọc message từ đầu hoặc từ offset của Consumer-group.
@@ -449,7 +472,7 @@ root@5eb93e353f81:/tmp/mout$
 Không có key: Đơn giản hóa quá trình publish message lên kafka, thứ tự của các message không quan trọng.
 
 
-## Docker: 
+## Docker:
 ```
 docker network create -d bridge app-tier
 
@@ -540,5 +563,3 @@ docker rm -f database
 vi /opt/guest-agent/datastore/manager/kafka/manager.py
 
 docker rm -f database; systemctl restart guest-agent;journalctl -f -u guest-agent
-
-
