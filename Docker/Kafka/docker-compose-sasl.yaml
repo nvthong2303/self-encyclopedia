@@ -1,0 +1,77 @@
+version: "2"
+
+services:
+  kafka:
+    container_name: kafka-plain
+    image: "bitnami/kafka:3.7"
+    environment:
+# // 		'KAFKA_CFG_NODE_ID': 0, 
+# // 		'KAFKA_CFG_PROCESS_ROLES': 'controller, broker', 
+# // 		'KAFKA_CFG_CONTROLLER_LISTENER_NAMES': 'CONTROLLER', 
+# // 		'KAFKA_CFG_LISTENERS': 'PLAINTEXT://:9092,SASL_PLAINTEXT://:9094', 
+# // 		'KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP': 'PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,SASL_PLAINTEXT:SASL_PLAINTEXT', 
+# // 		'KAFKA_CFG_CONTROLLER_QUORUM_VOTERS': '0@database:9093', 
+# // 		'': 'SASL_PLAINTEXT://10.60.68.9:9094,PLAINTEXT://10.60.68.9:9092', 
+# // 		'KAFKA_CFG_SASL_ENABLED_MECHANISMS': 'PLAIN', 
+# // 		'KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL': 'PLAIN', 
+# // 		'KAFKA_CFG_SECURITY_INTER_BROKER_PROTOCOL': 'SASL_PLAINTEXT', 
+# // 		'KAFKA_CFG_SUPER_USERS': 'User:admin', 
+# // 		'KAFKA_OPTS': '-Djava.security.auth.login.config=/opt/bitnami/kafka/config/kafka_jaas.conf', 
+      # active mode kraft
+      - KAFKA_ENABLE_KRAFT=yes
+      # node id trong cluster (với kraft, mỗi node phải có 1 id)
+      - KAFKA_CFG_NODE_ID=1
+      # vai trò của broker trong cluster
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      # xác định listener mà controller sẽ dùng để giao tiếp với các node khác
+      # vì controller và broker nằm cùng 1 node, phải chỉ rõ controller sử dụng
+      # listener nào
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      # định nghĩa các controller trong cluster và địa chỉ kết nối
+      # 1 là id
+      # 9093 là port của listener mà controller sử dụng
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@127.0.0.1:9093
+      # xác định các protocol mà kafka lắng nghe trên các port khác nhau
+      # PLAINTEXT:9092 : listener không yêu cầu bảo mật
+      # CONTROLLER://:9093 : listener dành cho controller
+      # SASL_PLAINTEXT:9094 : listener yêu cầu bảo mật SASL
+      - KAFKA_CFG_LISTENERS=CONTROLLER://:9093,SASL_PLAINTEXT://:9094
+      # xác định địa chỉ mà các kafka sẽ broadcast cho các client kết nối
+      # PLAINTEXT://127.0.0.1:9092 : dành cho các kết nối không bảo mật trong mạng nội bộ
+      # SASL_PLAINTEXT://127.0.0.1:9094 : dành cho các kết nối bảo mật SASL
+      - KAFKA_CFG_ADVERTISED_LISTENERS=SASL_PLAINTEXT://127.0.0.1:9094
+      # config log
+      - KAFKA_CFG_LOG_DIRS=/opt/bitnami/kafka/logs
+      # chỉ định cơ chế SASL được kích hoạt
+      - KAFKA_CFG_SASL_ENABLED_MECHANISMS=PLAIN
+      # định nghĩa cơ chế SASL mà các broker dùng để authen lẫn nhau
+      - KAFKA_CFG_SASL_MECHANISM_INTER_BROKER_PROTOCOL=PLAIN
+      # xác định security protocol giữa các broker
+      - KAFKA_CFG_SECURITY_INTER_BROKER_PROTOCOL=SASL_PLAINTEXT
+      # định nghĩa super user để quản lý kafka
+      - KAFKA_CFG_SUPER_USERS=User:admin
+      # path cấu hình SASL (JAAS file) cho kafka
+      - KAFKA_OPTS=-Djava.security.auth.login.config=/opt/bitnami/kafka/config/kafka_jaas.conf
+      # map từng listener với security protocol của nó
+      # PLAINTEXT:PLAINTEXT : listener không yêu cầu bảo mật
+      # CONTROLLER:PLAINTEXT : listener dành cho controller
+      # SASL_PLAINTEXT:SASL_PLAINTEXT : listener yêu cầu bảo mật SASL
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,SASL_PLAINTEXT:SASL_PLAINTEXT
+
+      # OPTIONAL CONFIG
+      # xác định số bản sao của topic lưu offset
+      # - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      # đặt số lượng bản ghi tối thiểu cần online để topic lưu trạng thái transaction hoạt động
+      # - KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR=1
+      # xác định số bản sao của topic lưu trạng thái transaction
+      # - KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+    volumes:
+      # - kafka_data:/bitnami
+      - ./kafka_jaas.conf:/opt/bitnami/kafka/config/kafka_jaas.conf
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+      - "9094:9094"
+# volumes:
+#   kafka_data:
+#     driver: local
