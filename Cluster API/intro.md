@@ -28,3 +28,8 @@
 
 ## Cách hoạt động:
 - Đầu tiên, cần 1 cụm kubernetes trước (cụm workload - dùng quản lý)
+
+
+# Cài clusterAPI trên minikube:
+## Các bước:
+-

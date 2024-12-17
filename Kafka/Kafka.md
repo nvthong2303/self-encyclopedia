@@ -447,7 +447,7 @@ Không thể tạo trực tiếp 1 consumer group, mà trong Kafka consumer grou
 # cli khác (chưa verify hết)
 --command-config /etc/kafka_client.conf
 ```
-- với nội dùng kafka_client.conf:
+- với nội dung kafka_client.conf:
 ```
 sasl.mechanism=PLAIN
 # Configure SASL_SSL if TLS/SSL encryption is enabled, otherwise configure SASL_PLAINTEXT

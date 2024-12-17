@@ -8,6 +8,8 @@ Connection Pool/Nodejs/node_modules/*
 
 Pythornhub/FastAPI-Clean-Example/fastapi/*
 Pythornhub/FastAPI-Clean-Example/__pycache__/*
+Pythornhub/FastAPI-Ecommerce-API/__pycache__/*
+Pythornhub/FastAPI-Ecommerce-API/venv-local/*
 
 Pythornhub/FastAPI/venv/*
 
@@ -17,3 +19,9 @@ gRPC/Nodejs/grpc-nodejs/node_modules/*
 
 node_modules/*
 package-lock.json
+
+Docker/MariaDB/data/*
+Docker/Mysql/data/*
+Docker/Mysql/db/*
+Docker/Mysql/config/*
+Docker/RabbitMQ/data/*

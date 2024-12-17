@@ -7,8 +7,8 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: secretpassword
+      POSTGRES_USER: user-name
+      POSTGRES_PASSWORD: strong-password
     volumes:
       - local_pgdata:/var/lib/postgresql/data
   pgadmin:
@@ -18,8 +18,8 @@ services:
     ports:
       - "8888:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: myuser@domain-name.com
-      PGADMIN_DEFAULT_PASSWORD: secretpassword
+      PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
+      PGADMIN_DEFAULT_PASSWORD: strong-password
     volumes:
       - pgadmin-data:/var/lib/pgadmin
 

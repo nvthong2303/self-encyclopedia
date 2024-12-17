@@ -12,7 +12,7 @@ def create_jaas_file(users, file_path):
     for i, (user, password) in enumerate(users):
         config_content += f'   user_{user}="{password}"\n'
 
-    config_content += '	;\n'
+    config_content += '   user_admin="admin-password";\n'
     config_content += '};\n'
 
     with open("/tmp/jaas.config", 'w') as tmp_file:
@@ -102,10 +102,12 @@ users = [
     ("alice", "alice-secret")
 ]
 
-# create_jaas_file(users, '/etc/kafka/config/kafka_jaas.conf')
 
-add_user_sasl("bob1", "password-bob", '/etc/kafka/config/kafka_jaas.conf')
-# remove_user_sasl("bob", '/etc/kafka/config/kafka_jaas.conf')
+path = 'kafka_jaas.conf'
+# create_jaas_file(users, path)
 
-user_list = parse_jaas_users("/etc/kafka/config/kafka_jaas.conf")
+# add_user_sasl("bob1", "password-bob", path)
+remove_user_sasl("bob1", path)
+
+user_list = parse_jaas_users(path)
 print("Danh sách user:", user_list)
